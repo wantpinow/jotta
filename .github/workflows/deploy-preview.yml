@@ -14,7 +14,16 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
 
       - name: Get branch name
         id: branch-name
@@ -37,8 +46,7 @@ jobs:
           echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
           echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
 
-          npm install --global drizzle-orm@latest @t3-oss/env-nextjs@latest drizzle-kit@latest
-          drizzle-kit push:pg
+          bun run db:push
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
