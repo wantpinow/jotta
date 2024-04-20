@@ -37,8 +37,7 @@ jobs:
           echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
           echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
 
-          npm install --global drizzle-orm@latest
-          npm install --global drizzle-kit@latest
+          npm install --global drizzle-orm@latest @t3-oss/env-nextjs@latest drizzle-kit@latest
           drizzle-kit push:pg
 
       - name: Install Vercel CLI
