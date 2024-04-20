@@ -7,8 +7,9 @@ on:
 
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  DIRECT_URL: ${{ secrets.DIRECT_URL }}
+  NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+  NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+  NEON_MAIN_BRANCH_NAME: ${{ secrets.NEON_MAIN_BRANCH_NAME }}
 
 jobs:
   deploy-production:
@@ -26,8 +27,16 @@ jobs:
       - name: Install Dependencies
         run: bun install
 
+      - name: Install neonctl
+        run: npm i -g neonctl@1
+
       - name: Run Drizzle Migration
         run: |
+          touch .env
+
+          echo "DIRECT_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
+          echo "DATABASE_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --pooled --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
+
           bun run db:push
 
       - name: Install Vercel CLI
