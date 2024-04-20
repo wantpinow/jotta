@@ -15,6 +15,9 @@ jobs:
   deploy-production:
     permissions: write-all
     runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: https://jotta-psi.vercel.app/
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
