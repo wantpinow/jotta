@@ -7,6 +7,7 @@ export default {
   driver: "pg",
   dbCredentials: {
     connectionString: env.DATABASE_URL,
+    database: env.PG_DATABASE,
   },
   tablesFilter: ["jotta_*"],
 } satisfies Config;
