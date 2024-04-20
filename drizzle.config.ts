@@ -8,5 +8,6 @@ export default {
   dbCredentials: {
     connectionString: env.DATABASE_URL,
   },
+
   tablesFilter: ["jotta_*"],
 } satisfies Config;
