@@ -40,6 +40,8 @@ jobs:
           echo "DIRECT_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
           echo "DATABASE_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --pooled --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
 
+          echo SKIP_ENV_VALIDATION=true >> .env
+
           bun run db:push
 
       - name: Install Vercel CLI
