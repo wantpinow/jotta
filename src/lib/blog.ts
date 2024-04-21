@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
 import { env } from "~/env";
 import { SITE_CONFIG } from "./config";
@@ -28,9 +27,13 @@ export type BlogPost = {
   published: boolean;
 };
 
-export const getAllBlogs = () => {
+export const getAllBlogsFiles = () => {
   const blogDir = SITE_CONFIG.blogFolder;
-  const files = fs.readdirSync(path.join(blogDir));
+  return fs.readdirSync(`${process.cwd()}/${blogDir}`);
+};
+
+export const getAllBlogs = () => {
+  const files = getAllBlogsFiles();
   const blogs: BlogPost[] = files.map((filename) => {
     const slug = filename.replace(".mdx", "");
     return getBlogBySlug(slug);
@@ -46,7 +49,7 @@ export const getAllBlogs = () => {
 export const getBlogBySlug = (slug: string) => {
   const blogDir = SITE_CONFIG.blogFolder;
   const fileContent = fs.readFileSync(
-    path.join(blogDir, `${slug}.mdx`),
+    `${process.cwd()}/${blogDir}/${slug}.mdx`,
     "utf-8",
   );
   const { data: frontMatter, content } = matter(fileContent);
