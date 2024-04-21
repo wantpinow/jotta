@@ -1,17 +1,13 @@
 // big thanks to https://gaudion.dev/blog/nextjs-mdx-blog
 
-import fs from "fs";
-import path from "path";
-
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
-import { getBlogBySlug } from "~/lib/blog";
+import { getAllBlogsFiles, getBlogBySlug } from "~/lib/blog";
 import { Separator } from "~/components/ui/separator";
 import { format } from "date-fns";
 import { BlogPostTagBadge } from "~/components/blog/tag";
-import { SITE_CONFIG } from "~/lib/config";
 
 const mdxOptions = {
   mdxOptions: {
@@ -32,7 +28,7 @@ const mdxOptions = {
 };
 
 export async function generateStaticParams() {
-  const files = fs.readdirSync(path.join(SITE_CONFIG.blogFolder));
+  const files = getAllBlogsFiles();
 
   const paths = files.map((filename) => ({
     slug: filename.replace(".mdx", ""),
