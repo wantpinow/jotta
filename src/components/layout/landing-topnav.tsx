@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { SITE_CONFIG } from "~/lib/config";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 
-export function Topnav() {
+export function LandingTopnav() {
   return (
     <header className="container flex items-center justify-between py-6">
       <Link href="/">
@@ -19,18 +19,6 @@ export function Topnav() {
             GitHub
           </Link>
         </Button>
-        {/* <Button variant="default" asChild>
-          <Link href={userId ? "/home" : "/sign-in"}>
-            {userId ? (
-              "Dashboard"
-            ) : (
-              <>
-                Get Started
-                <ChevronRightIcon className="ml-1" size={16} />
-              </>
-            )}
-          </Link>
-        </Button> */}
         <SignedOut>
           <Button variant="default" asChild>
             <Link href="/sign-in">Get Started</Link>

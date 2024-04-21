@@ -1,9 +1,9 @@
-import { Topnav } from "~/components/layout/topnav";
+import { LandingTopnav } from "~/components/layout/landing-topnav";
 
 export default async function Home() {
   return (
     <>
-      <Topnav />
+      <LandingTopnav />
       <main className="container">
         <div className="mx-auto max-w-lg">
           <h1 className="mt-12 text-center text-4xl font-bold">
