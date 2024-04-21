@@ -1,10 +1,10 @@
 import { ShapesIcon } from "lucide-react";
 
-export function Logo() {
+export function Logo({ blog = false }: { blog?: boolean }) {
   return (
     <div className="text-xl font-light tracking-widest">
       <ShapesIcon className="mr-2.5 inline-block stroke-[1.5px]" />
-      jotta.ai
+      jotta{blog ? " blog" : ".ai"}
     </div>
   );
 }

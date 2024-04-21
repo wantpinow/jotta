@@ -3,6 +3,10 @@
  * for Docker builds.
  */
 await import("./src/env.js");
+import createMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -16,6 +20,19 @@ const config = {
       },
     ],
   },
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+  reactStrictMode: true,
+  experimental: {
+    mdxRs: true,
+  },
 };
 
-export default config;
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+  },
+});
+
+export default withMDX(config);
