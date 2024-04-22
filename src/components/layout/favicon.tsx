@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 // Image metadata
 export const size = {
-  width: 32,
-  height: 32,
+  width: 128,
+  height: 128,
 };
 export function Favicon() {
   return new ImageResponse(
@@ -18,13 +18,13 @@ export function Favicon() {
           alignItems: "center",
           justifyContent: "center",
           color: "black",
-          borderRadius: 40,
+          borderRadius: 10000,
         }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="96"
+          height="96"
           viewBox="0 0 24 24"
           fill="black"
           stroke="currentColor"
