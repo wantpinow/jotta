@@ -6,7 +6,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 export function LandingTopnav() {
   return (
-    <header className="container flex items-center justify-between py-6">
+    <header className="from-primary/[0.07] container flex items-center justify-between bg-gradient-to-b to-transparent py-6">
       <Link href="/">
         <Logo />
       </Link>
@@ -20,12 +20,12 @@ export function LandingTopnav() {
           </Link>
         </Button>
         <SignedOut>
-          <Button variant="default" asChild>
+          <Button variant="secondary" asChild>
             <Link href="/sign-in">Get Started</Link>
           </Button>
         </SignedOut>
         <SignedIn>
-          <Button variant="default" asChild>
+          <Button variant="secondary" asChild>
             <Link href="/home">Dashboard</Link>
           </Button>
         </SignedIn>
