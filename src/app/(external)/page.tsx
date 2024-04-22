@@ -13,10 +13,14 @@ export default async function Home() {
           </span>
         </h1>
         <p className="mt-4 text-center">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          {/* Lorem, ipsum dolor sit amet consectetur adipisicing elit.
           Voluptatibus, id. Molestiae dolore accusamus commodi error odio.
           Similique ex fuga numquam enim quo illum, esse est quia natus nostrum,
-          maxime dignissimos!
+          maxime dignissimos! */}
+          Jotta is an AI-first language learning platform that provides
+          interactive lessons and exercises to help you learn Spanish. We use
+          various Natural Language Proccessing techniques to enhance your
+          learning. Sign up now to recieve $5 worth of free credits!
         </p>
         <Button
           className="group ml-auto mt-8 flex -translate-x-1 gap-0.5 px-5 transition-all duration-300 hover:translate-x-0"
