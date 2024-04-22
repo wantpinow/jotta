@@ -1,3 +1,4 @@
+import { SiteFooter } from "~/components/layout/footer";
 import { LandingTopnav } from "~/components/layout/landing-topnav";
 
 export default function ExternalLayout({
@@ -8,7 +9,8 @@ export default function ExternalLayout({
   return (
     <>
       <LandingTopnav />
-      <main className="container">{children}</main>
+      <main className="container min-h-screen">{children}</main>
+      <SiteFooter />
     </>
   );
 }
