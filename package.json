@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:migrate": "tsx ./src/server/db/migrate.ts",
     "db:push": "drizzle-kit push:pg",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx ./src/server/db/seed.ts",
@@ -58,6 +60,7 @@
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "latest",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.3",
