@@ -16,7 +16,6 @@ import {
   AudioLinesIcon,
   BadgeCentIcon,
   BotIcon,
-  CookingPotIcon,
   DramaIcon,
   DrumIcon,
   EllipsisIcon,
