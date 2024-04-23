@@ -17,6 +17,8 @@ export const seed = async () => {
       {
         id: "user_2fSGtZMX9snKmPPkD1sxX5twYl8",
         email: "patrick@frenett.net",
+        firstName: "Patrick",
+        lastName: "Frenett",
       },
     ])
     .returning();

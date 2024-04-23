@@ -4,7 +4,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import type { WebhookEvent } from "@clerk/nextjs/server";
 import { env } from "~/env";
-import { createUser, deleteUser } from "~/lib/sync_users";
+import { createUser, deleteUser, updateUser } from "~/lib/sync_users";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -57,18 +57,28 @@ export async function POST(req: Request) {
 
   // user creation event
   if (eventType === "user.created") {
-    const { id, primary_email_address_id, email_addresses } = evt.data;
-
+    const {
+      id,
+      primary_email_address_id,
+      email_addresses,
+      first_name: firstName,
+      last_name: lastName,
+    } = evt.data;
     const email = email_addresses.find(
       (email) => email.id === primary_email_address_id,
     )?.email_address;
-    if (!email) {
+    if (email === undefined) {
       return new Response("Could not find email", {
         status: 400,
       });
     }
+    if (firstName === null || lastName === null) {
+      return new Response("First name or last name is null", {
+        status: 400,
+      });
+    }
     try {
-      await createUser({ id, email });
+      await createUser({ id, email, firstName, lastName });
     } catch (err) {
       console.error("Error creating user:", err);
       return new Response("Error occured creating user", {
@@ -90,6 +100,38 @@ export async function POST(req: Request) {
     } catch (err) {
       console.error("Error deleting user:", err);
       return new Response("Error occured deleting user", {
+        status: 400,
+      });
+    }
+  }
+
+  // user updated event
+  if (eventType === "user.updated") {
+    const {
+      id,
+      primary_email_address_id,
+      email_addresses,
+      first_name: firstName,
+      last_name: lastName,
+    } = evt.data;
+    const email = email_addresses.find(
+      (email) => email.id === primary_email_address_id,
+    )?.email_address;
+    if (email === undefined) {
+      return new Response("Could not find email", {
+        status: 400,
+      });
+    }
+    if (firstName === null || lastName === null) {
+      return new Response("First name or last name is null", {
+        status: 400,
+      });
+    }
+    try {
+      await updateUser({ id, email, firstName, lastName });
+    } catch (err) {
+      console.error("Error updating user:", err);
+      return new Response("Error occured updating user", {
         status: 400,
       });
     }

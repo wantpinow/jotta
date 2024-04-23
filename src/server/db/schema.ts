@@ -15,6 +15,8 @@ export const createTable = pgTableCreator((name) => `jotta_${name}`);
 export const users = createTable("user", {
   id: varchar("id", { length: 256 }).primaryKey(),
   email: varchar("email", { length: 256 }).notNull(),
+  firstName: varchar("first_name", { length: 256 }).notNull(),
+  lastName: varchar("last_name", { length: 256 }).notNull(),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -26,7 +28,7 @@ export const users = createTable("user", {
 export const decks = createTable("deck", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: varchar("user_id")
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" })
     .notNull(),
   name: varchar("name", { length: 256 }),
   description: varchar("description", { length: 256 }),
@@ -41,7 +43,7 @@ export const decks = createTable("deck", {
 export const cards = createTable("card", {
   id: uuid("id").defaultRandom().primaryKey(),
   deckId: uuid("deck_id")
-    .references(() => decks.id)
+    .references(() => decks.id, { onDelete: "cascade", onUpdate: "cascade" })
     .notNull(),
   front: varchar("front", { length: 256 }).notNull(),
   back: varchar("back", { length: 256 }).notNull(),
