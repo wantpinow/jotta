@@ -8,7 +8,7 @@ export default function PrivacyPolicyPage() {
     "utf-8",
   );
   return (
-    <div className="prose prose-sm prose-stone md:prose-base lg:prose-lg mx-auto py-12">
+    <div className="dark:prose-invert prose prose-sm prose-stone md:prose-base lg:prose-lg mx-auto py-12">
       <MDXRemote source={fileContent} />
     </div>
   );

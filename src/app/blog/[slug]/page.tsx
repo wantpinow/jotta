@@ -52,7 +52,7 @@ export async function generateMetadata({
 export default function PostPage({ params }: { params: { slug: string } }) {
   const blog = getBlogBySlug(params.slug);
   return (
-    <article className="prose prose-sm prose-stone md:prose-base lg:prose-lg mx-auto mb-24 w-full">
+    <article className="dark:prose-invert prose prose-sm prose-stone md:prose-base lg:prose-lg mx-auto mb-24 w-full">
       <h1>{blog.title}</h1>
       <div className="flex items-end justify-between">
         <div className="max-w-sm">
