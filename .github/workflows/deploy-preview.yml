@@ -53,8 +53,9 @@ jobs:
 
           echo SKIP_ENV_VALIDATION=true >> .env
 
-          bun run db:generate
-          bun run db:migrate
+          # bun run db:generate
+          # bun run db:migrate
+          bun run db:push
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
