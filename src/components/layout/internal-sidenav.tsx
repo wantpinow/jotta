@@ -1,5 +1,5 @@
 import { cn } from "~/lib/utils";
-import { Button } from "../ui/button";
+import { Button } from "~/components/ui/button";
 import { SignOutButton } from "@clerk/nextjs";
 import {
   DropdownMenu,
@@ -26,7 +26,8 @@ import {
   TimerIcon,
   UserCircle2Icon,
 } from "lucide-react";
-import { Logo } from "./logo";
+import { Logo } from "~/components/layout/logo";
+import { ThemeToggle } from "~/components/layout/theme-toggle";
 
 export async function InternalSidenav({ className }: { className?: string }) {
   const user = await currentUser();
@@ -188,6 +189,7 @@ export async function InternalSidenav({ className }: { className?: string }) {
                   Profile
                 </Link>
               </DropdownMenuItem>
+              <ThemeToggle />
               <DropdownMenuSeparator />
               <SignOutButton>
                 <DropdownMenuItem className="cursor-pointer">
