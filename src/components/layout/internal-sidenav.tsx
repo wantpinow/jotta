@@ -46,6 +46,7 @@ export async function InternalSidenav({ className }: { className?: string }) {
     {
       name: "JottaGPT",
       icon: MessageSquareTextIcon,
+      link: "/chat",
     },
   ];
 
@@ -111,21 +112,24 @@ export async function InternalSidenav({ className }: { className?: string }) {
                 key={toolSet.name}
                 className="group flex w-full justify-between gap-2 px-2 py-2.5 text-muted"
                 variant="ghost"
+                asChild
               >
-                <span className="flex items-center gap-2">
-                  {<toolSet.icon size={24} className="stroke-[1.5px]" />}
-                  {toolSet.name}
-                </span>
-                <Button
-                  asChild
-                  className="hidden h-fit px-1 py-1 group-hover:block"
-                  variant="ghost"
-                >
-                  <EllipsisIcon
-                    size={24}
-                    className="cursor-pointer stroke-[1.5px] text-foreground"
-                  />
-                </Button>
+                <Link href={toolSet.link || "/"}>
+                  <span className="flex items-center gap-2">
+                    {<toolSet.icon size={24} className="stroke-[1.5px]" />}
+                    {toolSet.name}
+                  </span>
+                  <Button
+                    asChild
+                    className="hidden h-fit px-1 py-1 group-hover:block"
+                    variant="ghost"
+                  >
+                    <EllipsisIcon
+                      size={24}
+                      className="cursor-pointer stroke-[1.5px] text-foreground"
+                    />
+                  </Button>
+                </Link>
               </Button>
             ))}
           </div>
