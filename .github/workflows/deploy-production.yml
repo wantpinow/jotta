@@ -27,24 +27,29 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install Dependencies
-        run: bun install
-
       - name: Install neonctl
         run: npm i -g neonctl@1
 
-      - name: Run Drizzle Migration
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Prepare .env file
         run: |
           touch .env
 
           echo "DIRECT_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
           echo "DATABASE_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --pooled --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
 
+          cp .env .env.with_validation
           echo SKIP_ENV_VALIDATION=true >> .env
 
-          # bun run db:generate
-          # bun run db:migrate
+      - name: Run Drizzle Migration
+        run: |
           bun run db:push
+
+      - name: Update .env file
+        run: |
+          mv .env.with_validation .env
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
