@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 export default async function Home() {
   return (
     <div className="relative mx-auto max-w-xl">
-      <ShapesIcon className="text-primary absolute left-0 top-0 size-64 stroke-[1.5px] opacity-10" />
+      <ShapesIcon className="absolute left-0 top-0 size-64 stroke-[1.5px] text-primary opacity-10" />
       <div className="min-h-[300px] backdrop-blur-sm">
         <h1 className="mt-16 text-center text-5xl font-bold">
           <span className="opacity-50">Let&apos;s Learn</span>{" "}
@@ -13,10 +13,6 @@ export default async function Home() {
           </span>
         </h1>
         <p className="mt-4 text-center">
-          {/* Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-          Voluptatibus, id. Molestiae dolore accusamus commodi error odio.
-          Similique ex fuga numquam enim quo illum, esse est quia natus nostrum,
-          maxime dignissimos! */}
           Jotta is an AI-first language learning platform that provides
           interactive lessons and exercises to help you learn Spanish. We use
           various Natural Language Proccessing techniques to enhance your

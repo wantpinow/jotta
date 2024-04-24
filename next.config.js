@@ -25,6 +25,7 @@ const config = {
   experimental: {
     mdxRs: true,
   },
+  // transpilePackages: ["lucide-react"],
 };
 
 const withMDX = createMDX({

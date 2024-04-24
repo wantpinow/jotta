@@ -15,7 +15,7 @@ export const seed = async () => {
     .insert(users)
     .values([
       {
-        id: "user_2fSGtZMX9snKmPPkD1sxX5twYl8",
+        id: "user_2fWCKalXmLnivD0LkzKykkS9dwa",
         email: "patrick@frenett.net",
         firstName: "Patrick",
         lastName: "Frenett",
@@ -29,9 +29,22 @@ export const seed = async () => {
     .insert(decks)
     .values([
       {
-        name: "My Deck",
-        description: "This is my deck",
+        name: "Locations",
+        description: "Countries, cities, and landmarks",
         userId: user.id,
+        icon: "MapPin",
+      },
+      {
+        name: "Regular Verbs",
+        description: "Common verbs",
+        userId: user.id,
+        icon: "Drum",
+      },
+      {
+        name: "Going Out",
+        description: "Ordering food, asking for directions, etc.",
+        userId: user.id,
+        icon: "Drama",
       },
     ])
     .returning();
