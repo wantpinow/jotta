@@ -33,8 +33,8 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ClerkProvider>
-              {children}
               <Toaster />
+              {children}
             </ClerkProvider>
           </ThemeProvider>
         </TRPCReactProvider>

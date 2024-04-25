@@ -9,9 +9,9 @@ export default function ChatPage() {
   const [inputValue, setInputValue] = useState("");
   return (
     <div className="flex min-h-[calc(100vh-48px)] flex-col justify-end gap-4 rounded-lg border bg-light px-4 py-3">
-      <div className="mx-auto w-fit py-24 text-center">
+      <div className="mx-auto w-fit py-28 text-center">
         <div className="text-3xl font-semibold">JottaGPT</div>
-        <div className="text-muted">Your Spanish Amigos</div>
+        <div className="text-muted">Choose your Amigo/Amiga</div>
       </div>
       <div className="grid grid-cols-2 gap-2 px-4">
         <div className="rounded-lg border px-4 py-3 text-sm">

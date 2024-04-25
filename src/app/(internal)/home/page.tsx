@@ -1,4 +1,4 @@
-import { SettingsIcon } from "lucide-react";
+import { ChevronRightIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
 import { PageHeader } from "~/components/layout/page-header";
 import { Button } from "~/components/ui/button";
@@ -13,33 +13,38 @@ import { api } from "~/trpc/server";
 
 export default async function HomePage() {
   const decks = await api.flashcards.getDecks();
-  console.log(decks);
+  const totalCards = decks.reduce((acc, deck) => acc + deck.cards.length, 0);
   return (
     <div>
       <div className="flex justify-between">
         <div>
           <PageHeader title="Welcome Back" className="mb-1" />
           <div className="mb-6 text-sm text-muted">
-            You've got 32 cards to study
+            You've got {totalCards} card{totalCards === 1 ? "" : "s"} to study
           </div>
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button size="icon" variant="ghost">
-                <SettingsIcon size={22} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent sideOffset={8} side="left">
-              Preferences
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div className="flex gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button size="icon" variant="ghost">
+                  <SettingsIcon size={22} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={8} side="left">
+                Preferences
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <Button asChild>
+            <Link href="/decks/new">New Deck</Link>
+          </Button>
+        </div>
       </div>
       <div className="grid w-full grid-cols-3 gap-4">
         {decks.map((deck) => (
           <Link key={deck.id} href={`/decks/${deck.id}`}>
-            <div className="rounded border p-4 transition-colors duration-200 hover:bg-light">
+            <div className="rounded-lg border p-4 transition-colors duration-200 hover:bg-light">
               <div className="mb-4 flex gap-2">
                 <Icon name={deck.icon} size={28} />
                 <div>{deck.name}</div>
@@ -61,6 +66,18 @@ export default async function HomePage() {
             </div>
           </Link>
         ))}
+      </div>
+      <div className="text-right">
+        <Button
+          variant="link"
+          asChild
+          className="text-muted hover:text-foreground"
+        >
+          <Link href="/decks">
+            All Decks
+            <ChevronRightIcon size={16} className="ml-1" />
+          </Link>
+        </Button>
       </div>
     </div>
   );

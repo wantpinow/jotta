@@ -1454,3 +1454,5 @@ export const iconNames = [
   "ZoomIn",
   "ZoomOut",
 ] as const;
+
+export type IconName = (typeof iconNames)[number];

@@ -11,7 +11,7 @@ import {
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
 import { LogOutIcon, UserCircle2Icon } from "lucide-react";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "../theme-toggle";
 import { SignOutButton } from "@clerk/nextjs";
 
 export async function UserDropdown() {
