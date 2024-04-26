@@ -61,6 +61,7 @@ jobs:
         run: |
           export SKIP_ENV_VALIDATION=true
           cat .env
+          sleep 5
           bun run db:update-users-prod-to-dev
 
       - name: Install Vercel CLI
