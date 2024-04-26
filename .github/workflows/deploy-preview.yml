@@ -60,7 +60,7 @@ jobs:
         run: |
           # export SKIP_ENV_VALIDATION=true
           touch .env
-          echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
+          export DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require
           bun run db:update-users-prod-to-dev
 
       - name: Install Vercel CLI
