@@ -9,7 +9,12 @@ import { cn } from "~/lib/utils";
 import { Icon } from "./icon";
 import { useState } from "react";
 import { Input } from "./input";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 export function IconSelect({
   value,
   setValue,
@@ -60,20 +65,29 @@ export function IconSelect({
           className="mb-2 focus-visible:ring-0"
         />
         <div className="grid grid-cols-6">
-          {filteredIconNames.map((iconName) => (
-            <Button
-              key={iconName}
-              variant={value === iconName ? "default" : "ghost"}
-              className="w-full rounded-sm text-left"
-              onClick={() => {
-                setValue(iconName);
-                setOpen(false);
-              }}
-              size="icon"
-            >
-              <Icon name={iconName} size={16} />
-            </Button>
-          ))}
+          <TooltipProvider>
+            {filteredIconNames.map((iconName) => (
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    key={iconName}
+                    variant={value === iconName ? "default" : "ghost"}
+                    className="w-full rounded-sm text-left"
+                    onClick={() => {
+                      setValue(iconName);
+                      setOpen(false);
+                    }}
+                    size="icon"
+                  >
+                    <Icon name={iconName} size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{iconName.split(/(?=[A-Z])/).join(" ")}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </TooltipProvider>
         </div>
         {filteredIconNames.length === 0 && (
           <p className="mt-2 text-center text-sm text-muted-foreground">
