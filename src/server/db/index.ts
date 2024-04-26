@@ -4,6 +4,11 @@ import postgres from "postgres";
 import { env } from "~/env";
 import * as schema from "./schema";
 
+// require("dotenv").config();
+
+import dotenv from "dotenv";
+dotenv.config();
+
 /**
  * Cache the database connection in development. This avoids creating a new connection on every HMR
  * update.
