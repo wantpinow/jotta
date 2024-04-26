@@ -6,20 +6,18 @@ import { usePathname } from "next/navigation";
 import { Button } from "~/components/ui/button";
 import { Icon } from "~/components/ui/icon";
 import { cn } from "~/lib/utils";
-import { IconName } from "~/server/db/icons";
+import { type IconName } from "~/server/db/icons";
 
 export function SidenavButtonLink({
   iconName,
   label,
   href,
-  ellipsisContent,
   isNew = false,
   ellipsis = false,
 }: {
   iconName: IconName;
   label: string;
   href: string;
-  ellipsisContent?: React.ReactNode;
   isNew?: boolean;
   ellipsis?: boolean;
 }) {

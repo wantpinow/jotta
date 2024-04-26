@@ -25,15 +25,15 @@ export default function Error({
 
   return (
     <div className="container py-16">
-      <div className="bg-primary text-primary-foreground mx-auto max-w-lg rounded-lg px-4 py-6">
+      <div className="mx-auto max-w-lg rounded-lg bg-primary px-4 py-6 text-primary-foreground">
         <div className="text-4xl font-bold">
           <ShieldXIcon className="mr-2 inline-block" size={48} />
           Whoops
         </div>
         <Separator className="my-2" />
         <div className="text-base">
-          Something went wrong! We're sorry about that. You can try again or
-          contact support.
+          Something went wrong! We&apos;re sorry about that. You can try again
+          or contact support.
         </div>
         <div>
           <Accordion type="single" collapsible>

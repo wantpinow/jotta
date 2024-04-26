@@ -12,17 +12,13 @@ import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { IconSelect } from "~/components/ui/icon-select";
 import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
-import { iconNames } from "~/server/db/icons";
 import { api } from "~/trpc/react";
 
 const formSchema = z.object({

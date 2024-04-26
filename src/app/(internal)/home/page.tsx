@@ -20,7 +20,8 @@ export default async function HomePage() {
         <div>
           <PageHeader title="Welcome Back" className="mb-1" />
           <div className="mb-6 text-sm text-muted">
-            You've got {totalCards} card{totalCards === 1 ? "" : "s"} to study
+            You&apos;ve got {totalCards} card{totalCards === 1 ? "" : "s"} to
+            study
           </div>
         </div>
         <div className="flex gap-2">

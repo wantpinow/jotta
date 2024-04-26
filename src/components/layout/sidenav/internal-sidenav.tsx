@@ -1,18 +1,7 @@
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
-import {
-  AudioLinesIcon,
-  BadgeCentIcon,
-  BotIcon,
-  DramaIcon,
-  DrumIcon,
-  EllipsisIcon,
-  MapPinIcon,
-  MessageSquareTextIcon,
-  PlusIcon,
-  TimerIcon,
-} from "lucide-react";
+import { TimerIcon } from "lucide-react";
 import { Logo } from "~/components/layout/logo";
 import { UserDropdown } from "./user-dropdown";
 import { Suspense } from "react";
