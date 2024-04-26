@@ -49,7 +49,7 @@ jobs:
         run: |
           touch .env
 
-          # echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
+          echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
           echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
 
       - name: Run Drizzle Migration
@@ -59,7 +59,7 @@ jobs:
 
       - name: Update DB user IDs to match Clerk development environment
         run: |
-          export SKIP_ENV_VALIDATION=true
+          # export SKIP_ENV_VALIDATION=true
           bun run db:update-users-prod-to-dev
 
       - name: Install Vercel CLI
