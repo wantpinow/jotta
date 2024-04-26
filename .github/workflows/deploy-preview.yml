@@ -54,13 +54,13 @@ jobs:
           cp .env .env.with_validation
           echo SKIP_ENV_VALIDATION=true >> .env
 
-      # - name: Update DB user IDs to match Clerk development environment
-      #   run: |
-      #     bun run db:update-users-prod-to-dev
-
       - name: Run Drizzle Migration
         run: |
           bun run db:push
+
+      - name: Update DB user IDs to match Clerk development environment
+        run: |
+          bun run db:update-users-prod-to-dev
 
       - name: Update .env file
         run: |
