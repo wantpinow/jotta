@@ -9,6 +9,7 @@ env:
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }} # You can generate a an API key in your account settings
   NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }} # You can find this in your project settings
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
 
 jobs:
   deploy-preview:
@@ -60,6 +61,7 @@ jobs:
 
       - name: Update DB user IDs to match Clerk development environment
         run: |
+          echo CLERK_SECRET_KEY=${{ env.CLERK_SECRET_KEY }} >> .env
           bun run db:update-users-prod-to-dev
 
       - name: Update .env file
