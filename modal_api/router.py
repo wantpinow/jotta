@@ -35,6 +35,7 @@ web_app.add_middleware(
 class PingResponse(BaseModel):
     message: str
     environment: str = ENVIRONMENT
+    prefix: str = APP_PREFIX
 
 
 @web_app.get("/", response_model=PingResponse)

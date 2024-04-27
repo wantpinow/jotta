@@ -82,7 +82,6 @@ jobs:
 
       - name: Deploy Modal Apps
         run: |
-          export DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require
           poetry run python -m modal_api.deploy
 
       - name: Run Drizzle Migration

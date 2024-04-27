@@ -10,6 +10,10 @@ env:
   NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
   NEON_MAIN_BRANCH_NAME: ${{ secrets.NEON_MAIN_BRANCH_NAME }}
+  MODAL_ENVIRONMENT: ${{ secrets.MODAL_ENVIRONMENT_PROD }}
+  MODAL_APP_PREFIX: production
+  MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+  MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
 
 jobs:
   deploy-production:
@@ -17,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: https://jotta-psi.vercel.app/
+      url: https://jotta.ai
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -32,6 +36,34 @@ jobs:
 
       - name: Install Dependencies
         run: bun install
+
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Load cached poetry dependencies
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${
+
+      - name: Install python dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root --without runtime # don't install runtime dependencies, these get installed into the modal image
+
+      - name: Deploy Modal Apps
+        run: |
+          poetry run python -m modal_api.deploy
 
       - name: Prepare .env file
         run: |
