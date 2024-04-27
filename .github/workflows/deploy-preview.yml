@@ -50,6 +50,7 @@ jobs:
           touch .env
           echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
           echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
+          echo MODAL_APP_PREFIX=preview-pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }} >> .env
 
       - name: Run Drizzle Migration
         run: |
