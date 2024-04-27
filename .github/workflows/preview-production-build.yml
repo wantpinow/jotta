@@ -4,6 +4,8 @@ on: [pull_request]
 
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  MODAL_ENVIRONMENT: ${{ secrets.MODAL_ENVIRONMENT_PROD }}
+  MODAL_APP_PREFIX: ${{ secrets.MODAL_APP_PREFIX_PROD }}
 
 jobs:
   preview-production-build:
@@ -20,6 +22,12 @@ jobs:
 
       - name: Install Dependencies
         run: bun install
+
+      - name: Setup .env
+        run: |
+          touch .env
+          echo MODAL_APP_PREFIX=${{ env.MODAL_APP_PREFIX }} >> .env
+          echo MODAL_ENVIRONMENT=${{ env.MODAL_ENVIRONMENT }} >> .env
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest

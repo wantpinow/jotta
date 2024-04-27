@@ -59,7 +59,10 @@ def deploy_apps(prefix: str, environment: str) -> list[str]:
         app_name_with_prefix = f"{prefix}-{app_name}"
         deploy_shell_command = f"poetry run modal deploy {app_filename} --env {environment} --name {app_name_with_prefix}"
         logger.info(f"Deploying app {app_name} with command {deploy_shell_command}")
-        os.system(deploy_shell_command)
+        response = os.system(deploy_shell_command)
+        if response != 0:
+            logger.error(f"Failed to deploy app {app_name}")
+            raise ValueError(f"Failed to deploy app {app_name}")
 
         app_names.append(app_name)
         logger.info(f"Deployed app {app_name} with name {app_name_with_prefix}")
@@ -70,7 +73,10 @@ def deploy_apps(prefix: str, environment: str) -> list[str]:
 def deploy_router(prefix: str, environment: str):
     deploy_shell_command = f"poetry run modal deploy {ROUTER_FILENAME} --env {environment} --name {prefix}-router"
     logger.info(f"Deploying router with command {deploy_shell_command}")
-    os.system(deploy_shell_command)
+    response = os.system(deploy_shell_command)
+    if response != 0:
+        logger.error("Failed to deploy router")
+        raise ValueError("Failed to deploy router")
     logger.info("Deployed router")
 
 
@@ -78,7 +84,10 @@ def stop_apps(apps: list[ModalApp]):
     for app in apps:
         stop_shell_command = f"poetry run modal app stop {app.id}"
         logger.info(f"Stopping app {app.name} with command {stop_shell_command}")
-        os.system(stop_shell_command)
+        response = os.system(stop_shell_command)
+        if response != 0:
+            logger.error(f"Failed to stop app {app.name}")
+            raise ValueError(f"Failed to stop app {app.name}")
         logger.info(f"Stopped app {app.name}")
 
 

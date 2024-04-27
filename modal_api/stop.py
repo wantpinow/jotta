@@ -30,7 +30,10 @@ def stop_apps(apps: list[ModalApp]):
     for app in apps:
         stop_shell_command = f"poetry run modal app stop {app.id}"
         logger.info(f"Stopping app {app.name}")
-        os.system(stop_shell_command)
+        response = os.system(stop_shell_command)
+        if response != 0:
+            logger.error(f"Failed to stop app {app.name}")
+            raise ValueError(f"Failed to stop app {app.name}")
         logger.info(f"Stopped app {app.name}")
 
 
