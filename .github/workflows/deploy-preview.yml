@@ -9,6 +9,7 @@ env:
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }} # You can generate a an API key in your account settings
   NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }} # You can find this in your project settings
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
 
 jobs:
   deploy-preview:
@@ -47,20 +48,20 @@ jobs:
       - name: Prepare .env file
         run: |
           touch .env
-
           echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
           echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
 
-          cp .env .env.with_validation
-          echo SKIP_ENV_VALIDATION=true >> .env
-
       - name: Run Drizzle Migration
         run: |
+          export SKIP_ENV_VALIDATION=true
+          export DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require
           bun run db:push
 
-      - name: Update .env file
+      - name: Update DB user IDs to match Clerk development environment
         run: |
-          mv .env.with_validation .env
+          export SKIP_ENV_VALIDATION=true
+          export DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require
+          bun run db:update-users-prod-to-dev
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest

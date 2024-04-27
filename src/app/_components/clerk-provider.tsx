@@ -1,7 +1,7 @@
 "use client";
 
 import { ClerkProvider as ClerkProviderBase } from "@clerk/nextjs";
-import { NextClerkProviderProps } from "node_modules/@clerk/nextjs/dist/types/types";
+import { type NextClerkProviderProps } from "node_modules/@clerk/nextjs/dist/types/types";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 
