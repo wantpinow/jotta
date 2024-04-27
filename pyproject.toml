@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "jotta"
+version = "0.1.0"
+description = ""
+authors = ["Patrick Frenett <patrick@frenett.net>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+modal = "^0.62.116"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.runtime.dependencies]
+litellm = "^1.35.30"
+sentence-transformers = "^2.7.0"
+spacy = "^3.7.4"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
