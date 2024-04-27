@@ -12,6 +12,9 @@ jobs:
   delete-preview:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Set up python
         id: setup-python
         uses: actions/setup-python@v5
