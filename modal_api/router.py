@@ -5,7 +5,6 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from litellm import completion
 from modal import App, Cls, Image, Secret, asgi_app
 from pydantic import BaseModel
 
@@ -35,15 +34,7 @@ web_app.add_middleware(
 # ping
 class PingResponse(BaseModel):
     message: str
-
-
-class EndpointStatus(str, Enum):
-    UP = "UP"
-    DOWN = "DOWN"
-
-
-class HealthResponse(BaseModel):
-    status: EndpointStatus
+    environment: str = ENVIRONMENT
 
 
 @web_app.get("/", response_model=PingResponse)
@@ -152,6 +143,8 @@ class ChatStreamRequest(BaseModel):
 
 @web_app.post("/chat/stream", response_class=StreamingResponse)
 async def chat_stream(request: ChatStreamRequest):
+    from litellm import completion  # todo: see if this is slowing things down
+
     def stream():
         response = completion(
             model=request.model, messages=request.messages, stream=True

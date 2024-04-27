@@ -55,10 +55,7 @@ jobs:
 
       - name: Install python dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Install python project
-        run: poetry install --no-interaction
+        run: poetry install --no-interaction --no-root --without runtime # don't install runtime dependencies, these get installed into the modal image
 
       - name: Get branch name
         id: branch-name
@@ -116,7 +113,7 @@ jobs:
       - name: Comment on Pull Request
         uses: thollander/actions-comment-pull-request@v2
         with:
-          # GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+          # GITHUB_TOKEN: ${{ env.GH_TOKEN }} # Required for commenting on pull requests for private repos
           message: |
             Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
             Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
