@@ -72,16 +72,13 @@ jobs:
           echo "DIRECT_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
           echo "DATABASE_URL=$(neonctl --api-key ${{ secrets.NEON_API_KEY }} --pooled --project-id ${{ secrets.NEON_PROJECT_ID }} connection-string ${{ secrets.NEON_MAIN_BRANCH_NAME }})" >> .env
 
-          cp .env .env.with_validation
-          echo SKIP_ENV_VALIDATION=true >> .env
+          echo "MODAL_ENVIRONMENT=${{ env.MODAL_ENVIRONMENT }}" >> .env
+          echo "MODAL_APP_PREFIX=${{ env.MODAL_APP_PREFIX }}" >> .env
 
       - name: Run Drizzle Migration
         run: |
+          export SKIP_ENV_VALIDATION=true
           bun run db:push
-
-      - name: Update .env file
-        run: |
-          mv .env.with_validation .env
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
