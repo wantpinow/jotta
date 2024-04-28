@@ -26,9 +26,9 @@ export class DefaultService {
      * @returns SpacyProcessResponse Successful Response
      * @throws ApiError
      */
-    public static processProcessGet(data: $OpenApiTs['/process']['get']['req']): CancelablePromise<$OpenApiTs['/process']['get']['res'][200]> {
+    public static processProcessPost(data: $OpenApiTs['/process']['post']['req']): CancelablePromise<$OpenApiTs['/process']['post']['res'][200]> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/process',
             query: {
                 text: data.text,

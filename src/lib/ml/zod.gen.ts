@@ -77,7 +77,7 @@ export const openApiTsSchema = z.object({
     }),
   }),
   "/process": z.object({
-    get: z.object({
+    post: z.object({
       req: z.object({
         language: languageSchema,
         text: z.string(),

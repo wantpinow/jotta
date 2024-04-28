@@ -70,7 +70,7 @@ export type $OpenApiTs = {
         };
     };
     '/process': {
-        get: {
+        post: {
             req: {
                 language: Language;
                 text: string;

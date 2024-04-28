@@ -48,18 +48,24 @@ async def ping():
 spacy_model = Cls.lookup(
     f"{APP_PREFIX}-spacy-cpu", "Model", environment_name=ENVIRONMENT
 )
-spacy_model = Cls.lookup(
-    f"{APP_PREFIX}-spacy-cpu", "Model", environment_name=ENVIRONMENT
-)
+
+
+class SpacyProcessRequest(BaseModel):
+    text: str
+    language: Language
 
 
 class SpacyProcessResponse(BaseModel):
     data: list[SpacyToken]
 
 
-@web_app.get("/process", response_model=SpacyProcessResponse)
-async def process(text: str, language: Language):
-    return {"data": spacy_model.process.remote(text, language=language)}
+@web_app.post("/process", response_model=SpacyProcessResponse)
+async def process(
+    text: str,
+    language: Language,
+):
+    data = spacy_model.process.remote(text, language=language)
+    return SpacyProcessResponse(data=data)
 
 
 # chat
