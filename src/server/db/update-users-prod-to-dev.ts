@@ -1,8 +1,9 @@
 // a script to update the ids in the `users` table from production to development ids
-import { clerkClient, User } from "@clerk/clerk-sdk-node";
-import { db } from "~/server/db";
-import { users } from "./schema";
+import { type User, clerkClient } from "@clerk/clerk-sdk-node";
 import { eq } from "drizzle-orm";
+import { db } from "~/server/db";
+
+import { users } from "./schema";
 
 export const updateUsersProdToDev = async () => {
   // get all users currently in the db
