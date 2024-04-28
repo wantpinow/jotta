@@ -8,7 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from modal import App, Cls, Image, Secret, asgi_app
 from pydantic import BaseModel
 
-from ml.apps.spacy.models import SpacyToken
+from ml.apps.spacy.models import Language, SpacyToken
 from ml.utils import APP_PREFIX, ENVIRONMENT
 
 
@@ -46,10 +46,10 @@ async def ping():
 
 # spacy processing
 spacy_model = Cls.lookup(
-    f"{APP_PREFIX}-spacy-es-cpu", "Model", environment_name=ENVIRONMENT
+    f"{APP_PREFIX}-spacy-cpu", "Model", environment_name=ENVIRONMENT
 )
 spacy_model = Cls.lookup(
-    f"{APP_PREFIX}-spacy-es-cpu", "Model", environment_name=ENVIRONMENT
+    f"{APP_PREFIX}-spacy-cpu", "Model", environment_name=ENVIRONMENT
 )
 
 
@@ -58,8 +58,8 @@ class SpacyProcessResponse(BaseModel):
 
 
 @web_app.get("/process", response_model=SpacyProcessResponse)
-async def process(text: str):
-    return {"data": spacy_model.process.remote(text)}
+async def process(text: str, language: Language):
+    return {"data": spacy_model.process.remote(text, language=language)}
 
 
 # chat
