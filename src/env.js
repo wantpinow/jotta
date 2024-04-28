@@ -15,6 +15,7 @@ export const env = createEnv({
     CLERK_SECRET_KEY: z.string(),
     CLERK_WEBHOOK_SECRET: z.string(),
     // modal
+    MODAL_USER: z.string(),
     MODAL_ENVIRONMENT: z.string(),
     MODAL_APP_PREFIX: z.string(),
     MODAL_ROUTER_AUTH_TOKEN: z.string(),
@@ -48,6 +49,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
     CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
     // modal
+    MODAL_USER: process.env.MODAL_USER,
     MODAL_ENVIRONMENT: process.env.MODAL_ENVIRONMENT,
     MODAL_APP_PREFIX: process.env.MODAL_APP_PREFIX,
     MODAL_ROUTER_AUTH_TOKEN: process.env.MODAL_ROUTER_AUTH_TOKEN,

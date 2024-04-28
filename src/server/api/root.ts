@@ -1,5 +1,7 @@
-import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { flashcardsRouter } from "~/server/api/routers/flashcards";
+import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+
+import { mlRouter } from "./routers/ml";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +10,7 @@ import { flashcardsRouter } from "~/server/api/routers/flashcards";
  */
 export const appRouter = createTRPCRouter({
   flashcards: flashcardsRouter,
+  ml: mlRouter,
 });
 
 // export type definition of API
