@@ -8,7 +8,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from modal import App, Cls, Image, Secret, asgi_app
 from pydantic import BaseModel
 
-from modal_api.utils import APP_PREFIX, ENVIRONMENT
+from ml.apps.spacy.models import Language, SpacyToken
+from ml.utils import APP_PREFIX, ENVIRONMENT
 
 
 # initialize the FastAPI app (with Bearer token authentication)
@@ -45,80 +46,26 @@ async def ping():
 
 # spacy processing
 spacy_model = Cls.lookup(
-    f"{APP_PREFIX}-spacy-es-cpu", "Model", environment_name=ENVIRONMENT
-)
-spacy_model = Cls.lookup(
-    f"{APP_PREFIX}-spacy-es-cpu", "Model", environment_name=ENVIRONMENT
+    f"{APP_PREFIX}-spacy-cpu", "Model", environment_name=ENVIRONMENT
 )
 
 
-class PosTag(str, Enum):
-    ADJ = "ADJ"
-    ADP = "ADP"
-    PUNCT = "PUNCT"
-    ADV = "ADV"
-    AUX = "AUX"
-    SYM = "SYM"
-    INTJ = "INTJ"
-    CCONJ = "CCONJ"
-    X = "X"
-    NOUN = "NOUN"
-    DET = "DET"
-    PROPN = "PROPN"
-    NUM = "NUM"
-    VERB = "VERB"
-    PART = "PART"
-    PRON = "PRON"
-    SCONJ = "SCONJ"
-
-
-class DepTag(str, Enum):
-    ROOT = "ROOT"
-    ACL = "acl"
-    ADVCL = "advcl"
-    ADVMOD = "advmod"
-    AMOD = "amod"
-    APPOS = "appos"
-    AUX = "aux"
-    CASE = "case"
-    CC = "cc"
-    CCOMP = "ccomp"
-    COMPOUND = "compound"
-    CONJ = "conj"
-    COP = "cop"
-    CSUBJ = "csubj"
-    DEP = "dep"
-    DET = "det"
-    EXPL = "expl"
-    FIXED = "fixed"
-    FLAT = "flat"
-    IOBJ = "iobj"
-    MARK = "mark"
-    NMOD = "nmod"
-    NSUBJ = "nsubj"
-    NUMMOD = "nummod"
-    OBJ = "obj"
-    OBL = "obl"
-    PARATAXIS = "parataxis"
-    PUNCT = "punct"
-    XCOMP = "xcomp"
-
-
-class SpacyToken(BaseModel):
+class SpacyProcessRequest(BaseModel):
     text: str
-    pos: PosTag
-    dep: DepTag
-    lemma: str
-    is_sent_start: bool
+    language: Language
 
 
 class SpacyProcessResponse(BaseModel):
     data: list[SpacyToken]
 
 
-@web_app.get("/process", response_model=SpacyProcessResponse)
-async def process(text: str):
-    return {"data": spacy_model.process.remote(text)}
+@web_app.post("/process", response_model=SpacyProcessResponse)
+async def process(
+    text: str,
+    language: Language,
+):
+    data = spacy_model.process.remote(text, language=language)
+    return SpacyProcessResponse(data=data)
 
 
 # chat
@@ -142,7 +89,16 @@ class ChatStreamRequest(BaseModel):
     model: AvailableModels
 
 
-@web_app.post("/chat/stream", response_class=StreamingResponse)
+@web_app.post(
+    "/chat/stream",
+    responses={
+        200: {
+            "content": {"text/plain": {}},
+            "description": "Stream plain text using utf8 charset.",
+        }
+    },
+    response_class=StreamingResponse,
+)
 async def chat_stream(request: ChatStreamRequest):
     from litellm import completion  # todo: see if this is slowing things down
 

@@ -48,6 +48,10 @@ const config = {
       },
     ],
   },
-  ignorePatterns: ["src/components/ui", "src/lib/python_client"],
+  ignorePatterns: [
+    "src/components/ui",
+    "src/lib/ml",
+    "src/server/api/routers/ml.ts",
+  ],
 };
 module.exports = config;

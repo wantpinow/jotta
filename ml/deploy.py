@@ -4,7 +4,7 @@ from importlib import import_module
 
 from modal import App
 
-from modal_api.utils import (
+from ml.utils import (
     APP_PREFIX,
     APPS_FOLDER,
     ENVIRONMENT,
