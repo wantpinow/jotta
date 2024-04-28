@@ -5,15 +5,17 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start",
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx ./src/server/db/migrate.ts",
     "db:push": "drizzle-kit push:pg",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx ./src/server/db/seed.ts",
-    "db:update-users-prod-to-dev": "tsx ./src/server/db/update-users-prod-to-dev.ts",
-    "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start"
+    "db:update-users-prod-to-dev": "tsx ./src/server/db/update-users-prod-to-dev.ts", 
+    "client:generate-client": "openapi-ts --input https://${MODAL_USER}-${MODAL_ENVIRONMENT}--${MODAL_APP_PREFIX}-router-fastapi-app.modal.run/openapi.json --output ./src/lib/ml; sed -i -e 's/: unknown;/: any;/g' src/lib/ml/types.gen.ts",
+    "client:generate-types": "ts-to-zod src/lib/ml/types.gen.ts src/lib/ml/zod.gen.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.1",
@@ -64,6 +66,7 @@
   },
   "devDependencies": {
     "@clerk/clerk-sdk-node": "^5.0.1",
+    "@hey-api/openapi-ts": "^0.42.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.20",
@@ -81,6 +84,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
+    "ts-to-zod": "^3.8.3",
     "tsx": "^4.7.2",
     "typescript": "^5.4.2"
   },

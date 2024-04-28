@@ -83,7 +83,16 @@ class ChatStreamRequest(BaseModel):
     model: AvailableModels
 
 
-@web_app.post("/chat/stream", response_class=StreamingResponse)
+@web_app.post(
+    "/chat/stream",
+    responses={
+        200: {
+            "content": {"text/plain": {}},
+            "description": "Stream plain text using utf8 charset.",
+        }
+    },
+    response_class=StreamingResponse,
+)
 async def chat_stream(request: ChatStreamRequest):
     from litellm import completion  # todo: see if this is slowing things down
 
