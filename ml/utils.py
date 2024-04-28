@@ -24,7 +24,7 @@ ENVIRONMENT = os.environ["MODAL_ENVIRONMENT"]
 APP_PREFIX = os.environ["MODAL_APP_PREFIX"]
 
 # other constants
-MODAL_FOLDER = "modal_api"
+MODAL_FOLDER = "ml"
 APPS_FOLDER = f"{MODAL_FOLDER}/apps"
 ROUTER_FILENAME = f"{MODAL_FOLDER}/router.py"
 

@@ -1,7 +1,7 @@
 import json
 import os
 
-from modal_api.utils import APP_PREFIX, ENVIRONMENT, ModalApp, logger
+from ml.utils import APP_PREFIX, ENVIRONMENT, ModalApp, logger
 
 
 def get_running_apps(environment: str, prefix: str):
