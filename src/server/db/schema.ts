@@ -1,15 +1,20 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
-
 import { relations, sql } from "drizzle-orm";
 import {
+  json,
   pgEnum,
   pgTableCreator,
   timestamp,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import { vector } from "pgvector/drizzle-orm";
+
+import { conn } from ".";
 import { iconNames } from "./icons";
+
+// conn`CREATE EXTENSION IF NOT EXISTS vector`;
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -80,3 +85,50 @@ export const cardsRelations = relations(cards, ({ one }) => ({
     references: [decks.id],
   }),
 }));
+
+export const validPosTags = ["NOUN", "VERB", "ADJ"] as const;
+export const posTags = pgEnum("pos_tag", validPosTags);
+
+export const vocabItems = createTable("vocab_item", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: varchar("user_id")
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" })
+    .notNull(),
+  spanish: varchar("spanish", { length: 256 }).notNull(),
+  english: varchar("english", { length: 256 }).notNull(),
+  posTag: posTags("pos_tag").notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const vocabItemAttributeEnum = pgEnum("vocab_item_attribute_key", [
+  "english",
+  "description",
+  "lesson",
+]);
+
+export const vocabItemsAttributes = createTable("vocab_item_attribute", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: varchar("user_id")
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" })
+    .notNull(),
+  vocabItemId: uuid("vocab_item_id")
+    .references(() => vocabItems.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .notNull(),
+  type: vocabItemAttributeEnum("type").notNull(),
+  key: varchar("key", { length: 512 }).notNull(),
+  embedding: vector("embedding", { dimensions: 1536 }).notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});

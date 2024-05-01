@@ -1,5 +1,4 @@
 import { type Config } from "drizzle-kit";
-
 import { env } from "~/env";
 
 export default {
@@ -9,6 +8,5 @@ export default {
   dbCredentials: {
     connectionString: env.DATABASE_URL,
   },
-
   tablesFilter: ["jotta_*"],
 } satisfies Config;

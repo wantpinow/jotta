@@ -22,6 +22,7 @@ ruff = "^0.4.2"
 ipykernel = "^6.29.4"
 pandas = "^2.2.2"
 youtube-transcript-api = "^0.6.2"
+instructor = "^1.2.4"
 
 [build-system]
 requires = ["poetry-core"]

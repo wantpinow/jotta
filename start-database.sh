@@ -50,4 +50,4 @@ docker run -d \
 -e POSTGRES_PASSWORD="$DB_PASSWORD" \
 -e POSTGRES_DB=jotta \
 -p 5432:5432 \
-docker.io/postgres && echo "Database container '$DB_CONTAINER_NAME' was successfully created"
+pgvector/pgvector:pg16 && echo "Database container '$DB_CONTAINER_NAME' was successfully created"
