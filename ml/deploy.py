@@ -2,6 +2,7 @@ import json
 import os
 from importlib import import_module
 
+import click
 from modal import App
 
 from ml.utils import (
@@ -39,11 +40,13 @@ def get_running_apps(environment: str, prefix: str):
     return output
 
 
-def deploy_apps(prefix: str, environment: str) -> list[str]:
+def deploy_apps(prefix: str, environment: str, apps: list[str] = None) -> list[str]:
     # deploy all apps in the APPS_FOLDER
     app_names = []
     app_module_names = os.listdir(APPS_FOLDER)
     for app_module_name in app_module_names:
+        if apps is not None and app_module_name not in apps:
+            continue
         app_filename = os.path.join(APPS_FOLDER, app_module_name, "app.py")
         if not os.path.exists(app_filename):
             raise ValueError(f"App {app_module_name} does not have an app.py file")
@@ -91,7 +94,12 @@ def stop_apps(apps: list[ModalApp]):
         logger.info(f"Stopped app {app.name}")
 
 
-def main():
+@click.command()
+@click.option("--apps", multiple=True, help="Apps to deploy")
+def main(apps: list[str]):
+    if len(apps) == 0:
+        apps = None
+
     # get all currently running modal apps with the given prefix
     existing_apps = get_running_apps(ENVIRONMENT, APP_PREFIX)
 
@@ -99,13 +107,15 @@ def main():
     deployed_apps = deploy_apps(
         prefix=APP_PREFIX,
         environment=ENVIRONMENT,
+        apps=apps,
     )
 
     # deploy the router
-    deploy_router(
-        prefix=APP_PREFIX,
-        environment=ENVIRONMENT,
-    )
+    if apps is None or "router" in apps:
+        deploy_router(
+            prefix=APP_PREFIX,
+            environment=ENVIRONMENT,
+        )
 
     # delete any existing apps that are not in the APPS_FOLDER
     apps_to_delete = [
