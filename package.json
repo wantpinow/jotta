@@ -13,10 +13,14 @@
     "db:push": "drizzle-kit push:pg",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx ./src/server/db/seed.ts",
+    "db:start": "sh start-database.sh",
+    "db:stop": "sh stop-database.sh",
     "db:reset": "sh stop-database.sh; sh start-database.sh; sleep 1; bun run tsx ./src/server/db/migrate.ts; bun run tsx ./src/server/db/seed.ts",
     "db:update-users-prod-to-dev": "tsx ./src/server/db/update-users-prod-to-dev.ts",
     "client:generate-client": "openapi-ts --input https://${MODAL_USER}-${MODAL_ENVIRONMENT}--${MODAL_APP_PREFIX}-router-fastapi-app.modal.run/openapi.json --output ./src/lib/ml; sed -i -e 's/: unknown;/: any;/g' src/lib/ml/types.gen.ts",
-    "client:generate-types": "ts-to-zod src/lib/ml/types.gen.ts src/lib/ml/zod.gen.ts"
+    "client:generate-types": "ts-to-zod src/lib/ml/types.gen.ts src/lib/ml/zod.gen.ts",
+    "modal:deploy": "poetry run python -m ml.modal.deploy_apps"
+    
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.1",
