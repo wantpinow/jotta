@@ -78,7 +78,7 @@ jobs:
       - name: Run Drizzle Migration
         run: |
           export SKIP_ENV_VALIDATION=true
-          bun run db:push
+          bun run db:migrate
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
