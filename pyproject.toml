@@ -10,18 +10,23 @@ package-mode = false
 python = "^3.12"
 modal = "^0.62.116"
 python-dotenv = "^1.0.1"
+click = "^8.1.7"
 
 [tool.poetry.group.runtime.dependencies]
 litellm = "^1.35.30"
 sentence-transformers = "^2.7.0"
 spacy = "^3.7.4"
-
+torch = "^2.3.0"
+flask = "^3.0.3"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"
 ipykernel = "^6.29.4"
 pandas = "^2.2.2"
 youtube-transcript-api = "^0.6.2"
+instructor = "^1.2.4"
+lorem = "^0.1.1"
+uvicorn = "^0.29.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,7 +1,3 @@
-Había una vez en un pequeño pueblo llamado Tecnovalle, donde la tecnología reinaba. Los habitantes, seres mecánicos de aspecto humano, vivían en armonía con las máquinas que les rodeaban. Un día, el sistema que controlaba todas las funciones del pueblo comenzó a fallar, poniendo en peligro la vida de todos.
-
-Los jóvenes del pueblo, liderados por una valiente chica llamada Techia, se propusieron resolver el problema. Utilizando sus conocimientos en programación y robótica, se adentraron en la red central para repararla. En su viaje, se encontraron con desafíos y enemigos cibernéticos que intentaban detenerlos.
-
-Después de muchas horas de trabajo en equipo y superando obstáculos, lograron restaurar el sistema y salvar a Tecnovalle. A partir de ese día, los habitantes del pueblo valoraron aún más el poder de la tecnología y la importancia de saber utilizarla de manera responsable.
-
-Desde entonces, los jóvenes se convirtieron en héroes locales y cada año se celebraba el Día de la Tecnología en honor a su valentía y habilidades.
+version https://git-lfs.github.com/spec/v1
+oid sha256:f576355438cda2133c50bdd1b078232007ac37da20b44334547bff9063370df1
+size 1065

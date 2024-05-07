@@ -82,13 +82,13 @@ jobs:
 
       - name: Deploy Modal Apps
         run: |
-          poetry run python -m ml.deploy
+          poetry run python -m ml.modal.deploy --router
 
       - name: Run Drizzle Migration
         run: |
           export SKIP_ENV_VALIDATION=true
           export DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require
-          bun run db:push
+          bun run db:migrate
 
       - name: Update DB user IDs to match Clerk development environment
         run: |

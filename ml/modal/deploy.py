@@ -2,9 +2,10 @@ import json
 import os
 from importlib import import_module
 
+import click
 from modal import App
 
-from ml.utils import (
+from ml.modal.utils import (
     APP_PREFIX,
     APPS_FOLDER,
     ENVIRONMENT,
@@ -14,7 +15,7 @@ from ml.utils import (
 )
 
 
-def get_running_apps(environment: str, prefix: str):
+def get_running_apps(environment: str, prefix: str, ignore_router: bool = True):
     # get all currently running modal apps with the prefix
     logger.info(
         f"Getting running apps with prefix {prefix} in environment {environment}"
@@ -34,19 +35,24 @@ def get_running_apps(environment: str, prefix: str):
     )
 
     # ignore the router
-    output = [app for app in output if app.name != f"{prefix}-router"]
+    if ignore_router:
+        output = [app for app in output if app.name != f"{prefix}-router"]
 
     return output
 
 
-def deploy_apps(prefix: str, environment: str) -> list[str]:
+def deploy_apps(
+    prefix: str, environment: str, apps: list[str] | None = None
+) -> list[str]:
     # deploy all apps in the APPS_FOLDER
     app_names = []
     app_module_names = os.listdir(APPS_FOLDER)
     for app_module_name in app_module_names:
+        if apps is not None and app_module_name not in apps:
+            continue
         app_filename = os.path.join(APPS_FOLDER, app_module_name, "app.py")
         if not os.path.exists(app_filename):
-            raise ValueError(f"App {app_module_name} does not have an app.py file")
+            continue
 
         # import the app
         import_path = f"{'.'.join(APPS_FOLDER.split('/'))}.{app_module_name}.app"
@@ -91,7 +97,14 @@ def stop_apps(apps: list[ModalApp]):
         logger.info(f"Stopped app {app.name}")
 
 
-def main():
+@click.command()
+@click.option("--apps", multiple=True, help="Apps to deploy")
+@click.option("--router", help="Deploy the router", is_flag=True)
+@click.option("--delete", help="Delete all other apps", is_flag=True)
+def main(apps: list[str], router: bool, delete: bool):
+    if len(apps) == 0:
+        apps = None
+
     # get all currently running modal apps with the given prefix
     existing_apps = get_running_apps(ENVIRONMENT, APP_PREFIX)
 
@@ -99,23 +112,23 @@ def main():
     deployed_apps = deploy_apps(
         prefix=APP_PREFIX,
         environment=ENVIRONMENT,
+        apps=apps,
     )
 
     # deploy the router
-    deploy_router(
-        prefix=APP_PREFIX,
-        environment=ENVIRONMENT,
-    )
+    deploy_router(APP_PREFIX, ENVIRONMENT)
 
     # delete any existing apps that are not in the APPS_FOLDER
-    apps_to_delete = [
-        existing_app
-        for existing_app in existing_apps
-        if not any(
-            existing_app.name.endswith(deployed_app) for deployed_app in deployed_apps
-        )
-    ]
-    stop_apps(apps_to_delete)
+    if router:
+        apps_to_delete = [
+            existing_app
+            for existing_app in existing_apps
+            if not any(
+                existing_app.name.endswith(deployed_app)
+                for deployed_app in deployed_apps
+            )
+        ]
+        stop_apps(apps_to_delete)
 
 
 if __name__ == "__main__":

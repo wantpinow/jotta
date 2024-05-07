@@ -63,7 +63,7 @@ jobs:
 
       - name: Deploy Modal Apps
         run: |
-          poetry run python -m ml.deploy
+          poetry run python -m ml.modal.deploy --router
 
       - name: Prepare .env file
         run: |
@@ -78,7 +78,7 @@ jobs:
       - name: Run Drizzle Migration
         run: |
           export SKIP_ENV_VALIDATION=true
-          bun run db:push
+          bun run db:migrate
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
