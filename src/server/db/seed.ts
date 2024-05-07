@@ -1,13 +1,5 @@
-import * as csv from "csv-parse";
-import fs from "fs";
 import { db } from "~/server/db";
-import {
-  cards,
-  decks,
-  users,
-  validPosTags,
-  vocabItems,
-} from "~/server/db/schema";
+import { cards, decks, users, vocabItems } from "~/server/db/schema";
 
 export const seed = async () => {
   console.log("Seeding...");

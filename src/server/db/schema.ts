@@ -2,7 +2,6 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 import { relations, sql } from "drizzle-orm";
 import {
-  json,
   pgEnum,
   pgTableCreator,
   timestamp,
@@ -11,7 +10,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { vector } from "pgvector/drizzle-orm";
 
-import { conn } from ".";
 import { iconNames } from "./icons";
 
 // conn`CREATE EXTENSION IF NOT EXISTS vector`;
@@ -124,7 +122,7 @@ export const vocabItemsAttributes = createTable("vocab_item_attribute", {
     .notNull(),
   type: vocabItemAttributeEnum("type").notNull(),
   key: varchar("key", { length: 512 }).notNull(),
-  embedding: vector("embedding", { dimensions: 1536 }).notNull(),
+  embedding: vector("embedding", { dimensions: 1536 }).notNull(), // eslint-disable-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
