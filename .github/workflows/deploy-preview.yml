@@ -82,7 +82,7 @@ jobs:
 
       - name: Deploy Modal Apps
         run: |
-          poetry run python -m ml.deploy
+          poetry run python -m ml.modal.deploy --router
 
       - name: Run Drizzle Migration
         run: |

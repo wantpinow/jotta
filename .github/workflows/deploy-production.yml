@@ -63,7 +63,7 @@ jobs:
 
       - name: Deploy Modal Apps
         run: |
-          poetry run python -m ml.deploy
+          poetry run python -m ml.modal.deploy --router
 
       - name: Prepare .env file
         run: |

@@ -15,7 +15,7 @@ from ml.modal.utils import (
 )
 
 
-def get_running_apps(environment: str, prefix: str):
+def get_running_apps(environment: str, prefix: str, ignore_router: bool = True):
     # get all currently running modal apps with the prefix
     logger.info(
         f"Getting running apps with prefix {prefix} in environment {environment}"
@@ -35,7 +35,8 @@ def get_running_apps(environment: str, prefix: str):
     )
 
     # ignore the router
-    output = [app for app in output if app.name != f"{prefix}-router"]
+    if ignore_router:
+        output = [app for app in output if app.name != f"{prefix}-router"]
 
     return output
 
