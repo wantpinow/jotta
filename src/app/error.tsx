@@ -1,8 +1,9 @@
-"use client"; // Error components must be Client Components
+"use client";
 
+// Error components must be Client Components
 import { ShieldXIcon } from "lucide-react";
+import Link from "next/link";
 import { useEffect } from "react";
-import { Separator } from "~/components/ui/separator";
 import {
   Accordion,
   AccordionContent,
@@ -10,7 +11,7 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
-import Link from "next/link";
+import { Separator } from "~/components/ui/separator";
 
 export default function Error({
   error,
