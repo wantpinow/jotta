@@ -1,10 +1,10 @@
-import "~/styles/globals.css";
-
 import { Inter } from "next/font/google";
-import { TRPCReactProvider } from "~/trpc/react";
-import { Toaster } from "~/components/ui/sonner";
 import { ThemeProvider } from "~/components/theme/provider";
+import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
+import "~/styles/globals.css";
+import { TRPCReactProvider } from "~/trpc/react";
+
 import { ClerkProvider } from "./_components/clerk-provider";
 
 const inter = Inter({
@@ -28,7 +28,7 @@ export default function RootLayout({
         <TRPCReactProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="light"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

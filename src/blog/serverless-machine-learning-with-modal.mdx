@@ -1,0 +1,236 @@
+---
+title: Serverless Machine Learning with Modal and Next.js
+date: "05/04/2024"
+description: Getting Typescript and Python to play nice
+tags: ["Artificial Intelligence", "Web Development"]
+published: true
+---
+
+Over the past few months, I've really enjoyed building web applications with the [T3 stack](https://create.t3.gg/). The Next.js, Drizzle, and tRPC combo is unmatched in terms of developer experience and productivity for building CRUD apps.
+
+My current project, however, needs a bit more sauce. I'm building an AI-assisted language learning platform to explore and experiment with various NLP techniques; all the while teaching myself Spanish... maybe 👀.
+
+Specifically, I want to deploy the following machine learning models:
+
+1. Embedding models for vector search.
+2. Large language models for text generation and structured extractions.
+3. Text processing pipelines for part-of-speech tagging, lemmatization, and named entity recognition.
+4. Speech-to-text and text-to-speech models for audio processing.
+
+The T3 stack, whilst wonderful for Typescript/CRUD-heavy applications, isn't built for deploying and serving machine learning models. I've therefore integrated [Modal](https://modal.sh/), a platform for deploying serverless machine learning models, into this project to bridge the gap.
+
+In this post, I'll demonstrate how to set up Modal with an existing T3 project. We will deploy an embedding model to Modal, write a FastAPI router to protect our models, and generate a Typescript client to make requests to our models from the frontend. Throughout the process, I've tried to keep to the spirit of the T3 project by prioritizing type safety, developer experience, and ease of deployment.
+
+## Why Modal?
+
+I chose Modal for one big reason: developer experience. I hate writing Dockerfiles and Kubernetes manifests for my day job, let alone for my side projects with < 2 users.
+
+Everything in Modal is written in Python using the standard libraries and inference frameworks used to build and deploy machine learning models (think `transformers`, `spacy`, `vLLM` etc.). The deployment options are then specified using Modal's decorators. This means that you write your models in the normal way, then when it's time to deploy Modal handles the infrastructure, scaling, and other messy deployment details.
+
+On top of this, Modal's support for FastAPI endpoints made it quite easy to connect custom machine learning models to my Next.js app. I'll now give a demonstration of how I've set up Modal and Next.js for this project, going from writing the Python functions to calling it from the frontend. The code for this project is available at https://github.com/wantpinow/jotta.
+
+## Deploying an Embedding Model
+
+The first thing we'll do is write a Modal App that calculates sentence embeddings from a list of strings:
+
+```python
+# emebeddings/app.py
+import modal
+
+image = modal.Image.debian_slim(python_version="3.12").pip_install(
+    "sentence-transformers"
+)
+app = modal.App("embeddings", image=image)
+```
+
+This instantiates a Modal App called "embeddings" that uses Python 3.12 and installs the `sentence-transformers` library.
+
+Each modal App contains one or more methods that can be deployed to the cloud and called using the `modal` python package or via a web endpoint. For our embedding model, we'll create an EmbeddingModel class and attach it to our app using the `@app.cls()` decorator. We'll also specify that the model should run on an A10G GPU using the `gpu` argument:
+
+```python
+@app.cls(
+    gpu=modal.gpu.A10G()
+)
+class EmbeddingModel:
+    model_id = "thenlper/gte-base"
+
+    @modal.build()
+    def build(self):
+        model = SentenceTransformer(self.model_id)
+        model.save("/model.gte")
+
+    @modal.enter()
+    def load(self):
+        self.model = SentenceTransformer("/model.gte", device="cuda")
+
+
+    @modal.method()
+    def embed(self, texts: list[str]):
+        embeddings = self.model.encode(texts)
+        return embeddings.tolist()
+
+```
+
+The `EmbeddingModel` class has three main methods:
+
+1. `build(self)`: downloads the `gte-base` embedding model from Hugging Face and saves it to the `/model.gte` directory. This function is run once when the app's image is built, baking the model weights into the image and improving cold start times.
+2. `load(self)`: loads the saved model from the `/model.gte` directory into GPU memory. This function is run each time the app is started.
+3. `embed(self, texts: list[str])`: encodes a list of texts into embeddings using the loaded model. This is the function we'll call to get embeddings from our model.
+
+And that's it! We can now deploy our app to Modal using the `modal` CLI:
+
+```bash
+modal deploy embeddings/app.py
+```
+
+With the app deployed, we can now send requests to our model using regular Python code:
+
+```python
+model = modal.Cls.lookup(
+    "embeddings", "EmbeddingModel"
+)
+embeddings = model.embed.remote(["hello", "world"])
+```
+
+Under the hood, when we call `model.embed.remote(...)`, a container is spun up, the model is loaded into GPU memory, and the embeddings are calculated. The container stays alive for a short time (1 minute by default) to handle subsequent requests, after which it is shut down. This is one of the key benefits of Modal: we can autoscale our models without worrying about the underlying infrastructure.
+
+## Serving with FastAPI
+
+We will now define a FastAPI router app that handles all HTTP requests to our Modal models. This is done by wrapping a FastAPI app with a `modal.asgi_app()` decorator that exposes it to external requests.
+
+To start, let's need to define the FastAPI app, add a CORS middleware to allow requests from the frontend, and protect the app with a Bearer token:
+
+```python
+# router/app.py
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
+
+# check the Bearer token for each request
+async def verify_token(
+    token: HTTPAuthorizationCredentials = Depends(HTTPBearer())
+):
+    # ROUTER_AUTH_TOKEN will be added to runtime environment using Modal secrets
+    if token.credentials != os.environ["ROUTER_AUTH_TOKEN"]:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+# initialize the FastAPI app
+web_app = FastAPI(dependencies=[Depends(verify_token)])
+
+# allow CORS (so that we can call the router from the frontend)
+web_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+Next, we'll define an endpoint that calls our embedding model using the `EmbeddingModel.embed.remote(...)` method we saw earlier:
+
+```python
+embedding_model = modal.Cls.lookup("embeddings", "EmbeddingModel")
+
+@web_app.post(
+    "/embed", response_model=list[list[float]]
+)
+async def embed_endpoint(texts: list[str]):
+    return = embedding_model.embed.remote(texts)
+```
+
+Finally, we can wrap our FastAPI app with the `modal.asgi_app()` decorator to expose it to external requests. We also add the `router-auth-token` (which needs to be set up in the Modal dashboard) as a secret to the app:
+
+```python
+app = modal.App("router")
+
+@app.function(
+    secrets=[
+        modal.Secret.from_name("router-auth-token"),
+    ]
+)
+@modal.asgi_app()
+def fastapi_app():
+    return web_app
+```
+
+Once again, we can deploy our app to Modal using the `modal` CLI:
+
+```bash
+modal deploy router/app.py
+=============================================================================================
+✓ Created objects.
+├── 🔨 Created mount router/app.py
+├── 🔨 Created mount PythonPackage:ml
+└── 🔨 Created fastapi_app => https://wantpinow-jotta-dev--local-router-fastapi-app.modal.run
+```
+
+And voila! We now have a protected FastAPI router that serves embeddings from our Modal model. We can add as many endpoints as we like to this router, calling different Modal apps that will spin up and down as needed. We can view the swagger docs for our router by adding `/docs` to the router URL generated by the `modal deploy` command. We can also send POST requests to the embedding endpoint to check that everything is working as expected.
+
+```shell
+curl -X 'POST' \
+  'https://wantpinow-jotta-dev--local-router-fastapi-app.modal.run/embed' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer ${ROUTER_AUTH_TOKEN}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "texts": [
+    "This is a test!"
+  ]
+}'
+```
+
+## Connecting to the Frontend
+
+One of the great things about FastAPI is that it automatically generates OpenAPI schemas. This means that we can take the URL of our FastAPI router above (in our case it's https://wantpinow-jotta-dev--local-router-fastapi-app.modal.run) and add `/openapi.json` to the end to get a JSON representation of the API schema. From this, we can generate a Typescript client and their respective `zod` types (useful for `tRPC` calls) using the `openapi-typescript` and `` packages:
+
+```bash
+# bun add --dev @hey-api/openapi-ts ts-to-zod
+bun run openapi-ts \
+    --input https://wantpinow-jotta-dev--local-router-fastapi-app.modal.run/openapi.json \
+    --output ./src/lib/ml
+bun run ts-to-zod src/lib/ml/types.gen.ts src/lib/ml/zod.gen.ts
+```
+
+This will generate a Typescript client in the `src/lib/ml` directory that we can use to make requests to our FastAPI router from the frontend. It will also generate `zod` types that we can use to validate the request and response payloads in our `tRPC` procedures.
+
+And so, we can now call our embedding model from our Next.js application by defining a new `tRPC` router for our machine learning endpoints:
+
+```typescript
+// src/server/api/routers/ml.ts
+import { env } from "~/env";
+import { OpenAPI } from "~/lib/ml";
+import { openApiTsSchema } from "~/lib/ml/zod.gen";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+
+// set the base URL for the OpenAPI client
+OpenAPI.BASE =
+  "https://wantpinow-jotta-dev--local-router-fastapi-app.modal.run";
+
+// add the router-auth-token to the request headers
+OpenAPI.interceptors.request.use((request) => {
+  request.headers = {
+    ...JSON.parse(JSON.stringify(request.headers)),
+    Authorization: `Bearer ${env.MODAL_ROUTER_AUTH_TOKEN}`,
+  };
+  return request;
+});
+
+// define the router
+export const mlRouter = createTRPCRouter({
+  embed: protectedProcedure
+    .input(openApiTsSchema.shape["/embed"].shape.post.shape.req)
+    .mutation(async ({ ctx, input }) => {
+      const response = await ctx.modal.embedEmbedPost(input);
+      return response.data;
+    }),
+});
+```
+
+And there we have it - a serverless, typesafe set of machine learning models written in Python!
+
+This might seem like a lot of work, but I think it's worth it. As a data scientist, I want to be able to write my ML work in Python and use big GPUs without worrying about the infrastructure. As a frontend dev, I want to be able to call my ML models with the same ease as I call my CRUD endpoints. Modal allows me to do both, and I'm excited to see what we can build with it.

@@ -1,8 +1,10 @@
-import Link from "next/link";
-import { Logo } from "./logo";
-import { Button } from "~/components/ui/button";
-import { SITE_CONFIG } from "~/lib/config";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { env } from "~/env";
+import { SITE_CONFIG } from "~/lib/config";
+
+import { Logo } from "./logo";
 
 export function LandingTopnav() {
   return (
@@ -20,16 +22,21 @@ export function LandingTopnav() {
               GitHub
             </Link>
           </Button>
-          <SignedOut>
-            <Button variant="secondary" asChild>
-              <Link href="/sign-in">Get Started</Link>
-            </Button>
-          </SignedOut>
-          <SignedIn>
-            <Button variant="secondary" asChild>
-              <Link href="/home">Dashboard</Link>
-            </Button>
-          </SignedIn>
+          {env.NODE_ENV === "development" && (
+            <>
+              {" "}
+              <SignedOut>
+                <Button variant="secondary" asChild>
+                  <Link href="/sign-in">Get Started</Link>
+                </Button>
+              </SignedOut>
+              <SignedIn>
+                <Button variant="secondary" asChild>
+                  <Link href="/home">Dashboard</Link>
+                </Button>
+              </SignedIn>
+            </>
+          )}
         </div>
       </div>
     </header>
