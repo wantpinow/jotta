@@ -1,30 +1,14 @@
 // big thanks to https://gaudion.dev/blog/nextjs-mdx-blog
-
-import { MDXRemote } from "next-mdx-remote/rsc";
-import remarkGfm from "remark-gfm";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
-import { getAllBlogsFiles, getBlogBySlug } from "~/lib/blog";
-import { Separator } from "~/components/ui/separator";
 import { format } from "date-fns";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import { BlogPostTagBadge } from "~/components/blog/tag";
+import { Separator } from "~/components/ui/separator";
+import { getAllBlogsFiles, getBlogBySlug } from "~/lib/blog";
+import { rehypeOptions } from "~/lib/rehype";
+import "~/styles/highlight-js/github-dark.css";
 
 const mdxOptions = {
-  mdxOptions: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "wrap",
-          properties: {
-            className: ["anchor"],
-          },
-        },
-      ],
-    ],
-  },
+  mdxOptions: rehypeOptions,
 };
 
 export async function generateStaticParams() {

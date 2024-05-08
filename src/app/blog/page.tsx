@@ -1,13 +1,6 @@
-import Link from "next/link";
-import { Separator } from "~/components/ui/separator";
-import { getAllBlogs } from "~/lib/blog";
 import { format } from "date-fns";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+import Link from "next/link";
+import { BlogPostTagBadge } from "~/components/blog/tag";
 import {
   Pagination,
   PaginationContent,
@@ -15,8 +8,16 @@ import {
   PaginationItem,
   PaginationLink,
 } from "~/components/ui/pagination";
-import { BlogPostTagBadge } from "~/components/blog/tag";
+import { Separator } from "~/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { getAllBlogs } from "~/lib/blog";
 import { cn } from "~/lib/utils";
+
 import { DumbSwitch } from "./_components/dumb-switch";
 
 export default function BlogHomepage({
@@ -42,7 +43,7 @@ export default function BlogHomepage({
         <div className="grid grid-cols-1 py-2">
           {blogs.map((blog) => (
             <Link href={"/blog/" + blog.slug} passHref key={blog.slug}>
-              <div className="flex justify-between gap-2 py-4 align-middle transition-transform duration-200 hover:translate-x-0.5 hover:brightness-[1.4]">
+              <div className="flex group justify-between gap-2 py-4 align-middle transition-transform duration-200 hover:translate-x-0.5">
                 <div>
                   <h3
                     className={cn(

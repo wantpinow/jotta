@@ -1,6 +1,7 @@
 import fs from "fs";
 import matter from "gray-matter";
 import { env } from "~/env";
+
 import { SITE_CONFIG } from "./config";
 
 export type BlogPostTag =
@@ -34,13 +35,13 @@ export const getAllBlogsFiles = () => {
 
 export const getAllBlogs = () => {
   const files = getAllBlogsFiles();
-  const blogs: BlogPost[] = files.map((filename) => {
+  let blogs: BlogPost[] = files.map((filename) => {
     const slug = filename.replace(".mdx", "");
     return getBlogBySlug(slug);
   });
 
   if (env.NODE_ENV === "production") {
-    return blogs.filter((blog) => blog.published);
+    blogs = blogs.filter((blog) => blog.published);
   }
 
   return blogs.sort((a, b) => b.date.getTime() - a.date.getTime());
