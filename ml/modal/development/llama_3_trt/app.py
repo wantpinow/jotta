@@ -1,9 +1,5 @@
 import modal
-from litellm.utils import Message, TextCompletionResponse
-from modal import Secret, asgi_app
-from pydantic import BaseModel
-
-from ml.apps_v2.utils import create_app, get_web_image
+from litellm.utils import Message
 
 ##########################################################
 # constants
@@ -122,13 +118,13 @@ tensorrt_image = tensorrt_image.pip_install("fastapi", "litellm")
 # app
 ##########################################################
 
-app = modal.App("apps-v2-llama-3", image=tensorrt_image)
+app = modal.App("llama-3", image=tensorrt_image)
 
 
 @app.cls(
     gpu=GPU_CONFIG,
     secrets=[modal.Secret.from_name("huggingface-secret")],
-    container_idle_timeout=3 * MINUTES,
+    container_idle_timeout=5 * MINUTES,
     concurrency_limit=1,
 )
 class Model:
@@ -246,53 +242,3 @@ class Model:
         )
 
         return responses
-
-
-##########################################################
-# web endpoint
-##########################################################
-
-
-class ChatCompletionRequest(BaseModel):
-    messages: list[Message]
-    model: str
-
-
-web_image = get_web_image()
-web_app = create_app(auth=False)
-
-
-@web_app.post("/chat/completions", response_model=TextCompletionResponse)
-async def generate_web(request: ChatCompletionRequest):
-    responses = Model.generate.remote([request.messages])
-    return {
-        "object": "chat.completion",
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "index": 0,
-                "message": {
-                    "content": responses[0],
-                    "role": "assistant",
-                },
-            }
-        ],
-        "id": "chatcmpl-7fbd6077-de10-4cb4-a8a4-3ef11a98b7c8",
-        "created": 1699290237,
-        "model": "togethercomputer/llama-2-70b-chat",
-        "usage": {"completion_tokens": 18, "prompt_tokens": 14, "total_tokens": 32},
-    }
-
-
-@app.function(
-    image=web_image,
-    secrets=[
-        Secret.from_name("router-auth-token"),
-        Secret.from_name("openai-api-key"),
-    ],
-    enable_memory_snapshot=True,
-    concurrency_limit=1,
-)
-@asgi_app()
-def fastapi_app():
-    return web_app
