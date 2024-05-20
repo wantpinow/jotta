@@ -27,6 +27,7 @@ youtube-transcript-api = "^0.6.2"
 instructor = "^1.2.4"
 lorem = "^0.1.1"
 uvicorn = "^0.29.0"
+jsonlines = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]
