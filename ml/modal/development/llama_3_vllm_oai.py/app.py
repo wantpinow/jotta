@@ -110,6 +110,7 @@ local_template_path = (
             local_template_path, remote_path="/root/chat_template.jinja"
         )
     ],
+    concurrency_limit=1,
 )
 @modal.asgi_app()
 def serve():

@@ -1,6 +1,7 @@
 import json
 
 from openai import OpenAI
+from pydantic import BaseModel
 
 json_template = {
     "type": "object",
@@ -28,16 +29,13 @@ client.base_url = (
 )
 
 
-from pydantic import BaseModel
-
-
 class Response(BaseModel):
     answer: str
 
 
 # this is super slow?
 completion = client.chat.completions.create(
-    model="/models/meta-llama/Meta-Llama-3-8B-Instruct",
+    model="meta-llama/Meta-Llama-3-8B-Instruct",
     messages=messages,
     response_format={
         "type": "json_object",
