@@ -1,1 +1,1 @@
-export const PG_TABLE_PREFIX = "jotta_" as const;
+export const PG_TABLE_PREFIX = 'jotta_' as const;

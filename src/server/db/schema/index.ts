@@ -1,33 +1,23 @@
-import { relations, sql } from "drizzle-orm";
-import {
-  foreignKey,
-  pgTableCreator,
-  text,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
-import { PG_TABLE_PREFIX } from "@/server/conf";
+import { relations, sql } from 'drizzle-orm';
+import { foreignKey, pgTableCreator, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { PG_TABLE_PREFIX } from '@/server/conf';
 
-export const createTable = pgTableCreator(
-  (name) => `${PG_TABLE_PREFIX}${name}`,
-);
-
+export const createTable = pgTableCreator((name) => `${PG_TABLE_PREFIX}${name}`);
 
 // auth (user and session)
-export const userTable = createTable("user", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  githubId: text("github_id").unique(),
-  email: varchar("email", { length: 256 }).unique().notNull(),
-  firstName: varchar("first_name", { length: 256 }),
-  lastName: varchar("last_name", { length: 256 }),
-  passwordHash: text("password_hash"),
-  createdAt: timestamp("created_at", {
+export const userTable = createTable('user', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  githubId: text('github_id').unique(),
+  email: varchar('email', { length: 256 }).unique().notNull(),
+  firstName: varchar('first_name', { length: 256 }),
+  lastName: varchar('last_name', { length: 256 }),
+  passwordHash: text('password_hash'),
+  createdAt: timestamp('created_at', {
     withTimezone: true,
   })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", {
+  updatedAt: timestamp('updated_at', {
     withTimezone: true,
   })
     .$onUpdate(() => new Date())
@@ -40,15 +30,15 @@ export const userRelations = relations(userTable, ({ many }) => ({
 }));
 
 export const sessionTable = createTable(
-  "session",
+  'session',
   {
-    id: text("id").primaryKey(),
-    userId: uuid("user_id").notNull(),
-    expiresAt: timestamp("expires_at", {
+    id: text('id').primaryKey(),
+    userId: uuid('user_id').notNull(),
+    expiresAt: timestamp('expires_at', {
       withTimezone: true,
-      mode: "date",
+      mode: 'date',
     }).notNull(),
-    createdAt: timestamp("created_at", {
+    createdAt: timestamp('created_at', {
       withTimezone: true,
     })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -59,12 +49,12 @@ export const sessionTable = createTable(
       userReference: foreignKey({
         columns: [table.userId],
         foreignColumns: [userTable.id],
-        name: "session_user_fkey",
+        name: 'session_user_fkey',
       })
-        .onDelete("cascade")
-        .onUpdate("cascade"),
+        .onDelete('cascade')
+        .onUpdate('cascade'),
     };
-  },
+  }
 );
 
 export const sessionRelations = relations(sessionTable, ({ one }) => ({
