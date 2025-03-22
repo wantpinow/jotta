@@ -63,3 +63,21 @@ export const sessionRelations = relations(sessionTable, ({ one }) => ({
     references: [userTable.id],
   }),
 }));
+
+// notes
+export const noteTable = createTable('note', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').notNull(),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+  })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+  })
+    .$onUpdate(() => new Date())
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});

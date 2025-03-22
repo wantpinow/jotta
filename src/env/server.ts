@@ -12,6 +12,9 @@ export const serverEnv = createEnv({
     DATABASE_PASSWORD: z.string().min(1),
     DATABASE_PORT: z.string().min(1),
     DATABASE_URL: z.string().url(),
+    // oauth
+    OAUTH_GITHUB_CLIENT_ID: z.string().min(1),
+    OAUTH_GITHUB_CLIENT_SECRET: z.string().min(1),
   },
   experimental__runtimeEnv: process.env,
 });
