@@ -1,5 +1,12 @@
 import { relations, sql } from 'drizzle-orm';
-import { foreignKey, pgTableCreator, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+  foreignKey,
+  pgTableCreator,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { PG_TABLE_PREFIX } from '@/server/conf';
 
 export const createTable = pgTableCreator((name) => `${PG_TABLE_PREFIX}${name}`);
@@ -54,7 +61,7 @@ export const sessionTable = createTable(
         .onDelete('cascade')
         .onUpdate('cascade'),
     };
-  }
+  },
 );
 
 export const sessionRelations = relations(sessionTable, ({ one }) => ({

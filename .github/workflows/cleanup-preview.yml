@@ -1,0 +1,29 @@
+name: Clean up Preview Deployment
+
+on:
+  pull_request:
+    types: [closed]
+    paths-ignore:
+      - 'docs/**'
+
+env:
+  # secrets
+  NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+
+  # variables
+  NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+
+jobs:
+  delete-preview:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install neonctl
+        run: npm i -g neonctl@2
+
+      - name: Delete Neon Branch
+        run: |
+          neonctl branches delete preview/pr-${{ github.event.number }}-${{ github.event.pull_request.head.ref }} --project-id ${{ env.NEON_PROJECT_ID }} --api-key ${{ env.NEON_API_KEY }}
