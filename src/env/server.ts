@@ -10,4 +10,5 @@ export const serverEnv = createEnv({
     DATABASE_URL: z.string().url(),
   },
   experimental__runtimeEnv: process.env,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
