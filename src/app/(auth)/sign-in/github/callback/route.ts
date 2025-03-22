@@ -29,7 +29,7 @@ export async function GET(request: Request): Promise<Response> {
         Authorization: `Bearer ${tokens.accessToken()}`,
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     const githubUser: GitHubUser = await githubUserResponse.json();
 
     // check if the user already exists with the same github id, sign them in if they do

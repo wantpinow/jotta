@@ -13,7 +13,7 @@ const eslintConfig = [
   ...compat.extends(
     'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
   ),
   {
     files: ['**/*.{js,jsx,ts,tsx}'],

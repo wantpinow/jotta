@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { generateSession } from './_actions/transcribe';
 import { Button } from '@/components/ui/button';
 
 export default function TranscribeRealtimePage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [session, setSession] = useState<any>(null);
   const [isRecording, setIsRecording] = useState(false);
 
@@ -138,7 +139,7 @@ function RealtimeTranscription({
     }
   };
 
-  const stopRecording = () => {
+  const stopRecording = useCallback(() => {
     if (mediaStream.current) {
       mediaStream.current.getTracks().forEach((track) => track.stop());
       mediaStream.current = null;
@@ -155,7 +156,7 @@ function RealtimeTranscription({
     }
 
     setIsRecording(false);
-  };
+  }, [mediaStream, dataChannel, peerConnection, setIsRecording]);
 
   // Clean up on unmount
   useEffect(() => {
@@ -164,7 +165,7 @@ function RealtimeTranscription({
         stopRecording();
       }
     };
-  }, []);
+  }, [isRecording, stopRecording]);
 
   return (
     <div className="space-y-4">

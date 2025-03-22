@@ -13,6 +13,7 @@ env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
   OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
   # variables
   HOST: ${{ vars.HOST }}
@@ -65,6 +66,7 @@ jobs:
           echo HOST=${{ env.HOST }} >> .env.local
           echo OAUTH_GITHUB_CLIENT_ID=${{ env.OAUTH_GITHUB_CLIENT_ID }} >> .env.local
           echo OAUTH_GITHUB_CLIENT_SECRET=${{ env.OAUTH_GITHUB_CLIENT_SECRET }} >> .env.local
+          echo OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} >> .env.local
 
           # Deploy to Vercel
           preview_url=$(eval "vercel deploy --prod --token=${{ env.VERCEL_TOKEN }} $(grep -v '^#' .env.local | grep '=' | awk '{print "-e " $0 " -b " $0}' | tr '\n' ' ')")

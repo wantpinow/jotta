@@ -11,7 +11,6 @@ import {
   Italic,
   List,
   ListOrdered,
-  Heading1,
   Heading2,
   Heading3,
   Link as LinkIcon,

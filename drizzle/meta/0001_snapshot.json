@@ -86,12 +86,8 @@
           "name": "session_user_fkey",
           "tableFrom": "jotta_session",
           "tableTo": "jotta_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -165,16 +161,12 @@
         "jotta_user_github_id_unique": {
           "name": "jotta_user_github_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "github_id"
-          ]
+          "columns": ["github_id"]
         },
         "jotta_user_email_unique": {
           "name": "jotta_user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},

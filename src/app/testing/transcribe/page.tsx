@@ -6,6 +6,7 @@ import { transcribeAudio } from './_actions/transcribe';
 export default function TranscribePage() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [transcription, setTranscription] = useState<any>(null);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,8 +71,8 @@ export default function TranscribePage() {
 
       const result = await transcribeAudio(formData);
       setTranscription(result);
-    } catch (err: any) {
-      setError(`Transcription error: ${err.message}`);
+    } catch (err) {
+      setError(`Transcription error: ${err}`);
       console.error('Transcription error:', err);
     } finally {
       setIsTranscribing(false);
@@ -145,6 +146,7 @@ export default function TranscribePage() {
                     </tr>
                   </thead>
                   <tbody>
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     {transcription.words.map((word: any, index: number) => (
                       <tr
                         key={index}
