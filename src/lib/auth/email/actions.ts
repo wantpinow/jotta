@@ -1,4 +1,5 @@
 'use server';
+
 import { sha256 } from '@noble/hashes/sha2';
 
 import { emailSignInSchema } from './validate';

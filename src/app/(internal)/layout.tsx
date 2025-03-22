@@ -11,7 +11,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
           <div className="flex items-center justify-between h-16">
             <Link href="/home">
               <button className="flex items-center gap-2 cursor-pointer">
-                <Brain className="text-primary text-2xl" />
+                <Brain className="text-primary" size={24} />
                 <span className="text-xl font-semibold text-primary">Jotta</span>
               </button>
             </Link>
