@@ -90,13 +90,25 @@ export default function JournalApp() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-400 hover:text-gray-600"
+                  >
                     <Image className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-400 hover:text-gray-600"
+                  >
                     <Link className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-400 hover:text-gray-600"
+                  >
                     <Tag className="h-4 w-4" />
                   </Button>
                 </div>
@@ -125,16 +137,20 @@ export default function JournalApp() {
                       Personal
                     </Badge>
                   </div>
-                  <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-400 hover:text-gray-600"
+                  >
                     <Ellipsis className="h-4 w-4" />
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="px-6 py-0">
                 <p className="text-gray-700">
-                  Had a productive brainstorming session with the team today. We discussed the new
-                  feature implementation and timeline. Need to follow up with @Bob about the
-                  technical requirements.
+                  Had a productive brainstorming session with the team today. We discussed
+                  the new feature implementation and timeline. Need to follow up with @Bob
+                  about the technical requirements.
                 </p>
               </CardContent>
               <CardFooter className="p-6 pt-4">
@@ -179,12 +195,20 @@ export default function JournalApp() {
         </div>
 
         <div className="mb-6">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Recent Tags</h3>
+          <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+            Recent Tags
+          </h3>
           <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+            <Badge
+              variant="secondary"
+              className="bg-blue-100 text-blue-700 hover:bg-blue-200"
+            >
               Meeting
             </Badge>
-            <Badge variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-200">
+            <Badge
+              variant="secondary"
+              className="bg-green-100 text-green-700 hover:bg-green-200"
+            >
               Project
             </Badge>
             <Badge
@@ -203,7 +227,9 @@ export default function JournalApp() {
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Recent People</h3>
+          <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+            Recent People
+          </h3>
           <div className="space-y-3">
             <div className="flex items-center">
               <Avatar className="h-8 w-8">

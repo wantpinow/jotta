@@ -19,13 +19,21 @@ export const auth = cache(
     try {
       if (result?.session?.fresh) {
         const sessionCookie = lucia.createSessionCookie(result.session.id);
-        (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+        (await cookies()).set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
       }
       if (!result.session) {
         const sessionCookie = lucia.createBlankSessionCookie();
-        (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+        (await cookies()).set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
       }
     } catch {}
     return result;
-  }
+  },
 );

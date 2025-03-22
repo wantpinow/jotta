@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { type User } from "lucia";
-import { createContext, useContext } from "react";
+import { type User } from 'lucia';
+import { createContext, useContext } from 'react';
 
 const UserContext = createContext<User | undefined>(undefined);
 
@@ -18,7 +18,7 @@ export function UserProvider({
 export function useUser() {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error("useUser must be used within a UserProvider");
+    throw new Error('useUser must be used within a UserProvider');
   }
   return context;
 }

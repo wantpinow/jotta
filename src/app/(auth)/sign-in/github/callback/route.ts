@@ -39,7 +39,11 @@ export async function GET(request: Request): Promise<Response> {
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
-      (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+      (await cookies()).set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
       return new Response(null, {
         status: 302,
         headers: {
@@ -79,7 +83,11 @@ export async function GET(request: Request): Promise<Response> {
     // create a session for the new user
     const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
-    (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+    (await cookies()).set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
 
     // redirect to the signed in page
     return new Response(null, {

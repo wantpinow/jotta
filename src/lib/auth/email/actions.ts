@@ -30,7 +30,11 @@ export const signUpWithEmail = async (values: z.infer<typeof emailSignInSchema>)
 
   const session = await lucia.createSession(user.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
-  (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+  (await cookies()).set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
 
   return redirectNavigation(values.redirect ?? signUpRedirect);
 };
@@ -39,7 +43,10 @@ export const signInWithEmail = async (values: z.infer<typeof emailSignInSchema>)
   const passwordHash = Buffer.from(sha256(values.password)).toString('base64');
 
   const user = await db.query.userTable.findFirst({
-    where: and(eq(userTable.email, values.email), eq(userTable.passwordHash, passwordHash)),
+    where: and(
+      eq(userTable.email, values.email),
+      eq(userTable.passwordHash, passwordHash),
+    ),
   });
   if (user === undefined) {
     throw new Error('Incorrect email or password');
@@ -47,7 +54,11 @@ export const signInWithEmail = async (values: z.infer<typeof emailSignInSchema>)
 
   const session = await lucia.createSession(user.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
-  (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+  (await cookies()).set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
 
   return redirectNavigation(values.redirect ?? signUpRedirect);
 };
