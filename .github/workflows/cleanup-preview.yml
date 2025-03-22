@@ -1,7 +1,10 @@
 name: Clean up Preview Deployment
+
 on:
   pull_request:
     types: [closed]
+    paths-ignore:
+      - 'docs/**'
 
 env:
   # secrets
