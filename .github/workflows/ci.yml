@@ -34,13 +34,7 @@ jobs:
           fi
 
       - name: Check Formatting
-        run: |
-          bun run format:check
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "Some files are not properly formatted. Please run 'bun run format' locally and commit the changes."
-            git status
-            exit 1
-          fi
+        run: bun run format:check
 
       - name: Run Linter
         run: bun run lint
