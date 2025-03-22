@@ -12,6 +12,7 @@ env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+  OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
 
   # variables
   HOST: ${{ vars.HOST }}
@@ -19,6 +20,7 @@ env:
   NEON_MAIN_BRANCH_NAME: ${{ vars.NEON_MAIN_BRANCH_NAME }}
   NEON_DATABASE_NAME: ${{ vars.NEON_DATABASE_NAME }}
   NEON_DATABASE_USERNAME: ${{ vars.NEON_DATABASE_USERNAME }}
+  OAUTH_GITHUB_CLIENT_ID: ${{ vars.OAUTH_GITHUB_CLIENT_ID }}
 
 jobs:
   deploy-production:
@@ -61,6 +63,8 @@ jobs:
           touch .env.local
           echo DATABASE_URL=${{ env.DATABASE_URL }} >> .env.local
           echo HOST=${{ env.HOST }} >> .env.local
+          echo OAUTH_GITHUB_CLIENT_ID=${{ env.OAUTH_GITHUB_CLIENT_ID }} >> .env.local
+          echo OAUTH_GITHUB_CLIENT_SECRET=${{ env.OAUTH_GITHUB_CLIENT_SECRET }} >> .env.local
 
           # Deploy to Vercel
           preview_url=$(eval "vercel deploy --prod --token=${{ env.VERCEL_TOKEN }} $(grep -v '^#' .env.local | grep '=' | awk '{print "-e " $0 " -b " $0}' | tr '\n' ' ')")
