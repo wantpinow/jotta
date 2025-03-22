@@ -4,11 +4,15 @@ on:
     types: [closed]
 
 env:
+  # secrets
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+
+  # variables
   NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
 
 jobs:
   delete-preview:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
