@@ -26,7 +26,7 @@ export async function GET(request: Request): Promise<Response> {
     const tokens = await github.validateAuthorizationCode(code);
     const githubUserResponse = await fetch('https://api.github.com/user', {
       headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
+        Authorization: `Bearer ${tokens.accessToken()}`,
       },
     });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
