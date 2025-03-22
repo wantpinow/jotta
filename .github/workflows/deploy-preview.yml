@@ -81,9 +81,10 @@ jobs:
           fi
 
       - name: Comment on Pull Request
-        uses: thollander/actions-comment-pull-request@v2
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
           GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+          header: preview-urls
           message: |
             Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
             Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
