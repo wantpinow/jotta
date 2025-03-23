@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Editor } from '@/components/tiptap/editor';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { File, Mic } from 'lucide-react';
 import { isFilledHtml } from '@/lib/utils';

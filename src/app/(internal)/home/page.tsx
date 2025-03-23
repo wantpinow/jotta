@@ -1,10 +1,12 @@
 import { auth } from '@/lib/auth/validate';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { MicIcon, MoreHorizontalIcon, PlusIcon, User } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { MicIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import { NotesList, NotesListSkeleton } from './_components/notes-list';
+import {
+  NotesList,
+  NotesListSkeleton,
+} from '@/app/(internal)/home/_components/notes-list';
 import { Suspense } from 'react';
 export default async function Home() {
   const { user } = await auth();
