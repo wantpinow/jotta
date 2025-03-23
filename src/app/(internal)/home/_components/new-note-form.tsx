@@ -44,8 +44,7 @@ export function NewNoteForm() {
       content: exampleContent,
     },
   });
-  const onSubmit = (values: z.infer<typeof newNoteSchema>) => {
-    console.log(values);
+  const onSubmit = () => {
     toast.success('Note saved');
   };
   return (
@@ -61,6 +60,7 @@ export function NewNoteForm() {
                   content={field.value}
                   onChange={field.onChange}
                   placeholder="Write your note here..."
+                  showToolbar={false}
                 />
               </FormControl>
             </FormItem>

@@ -20,26 +20,27 @@ import {
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 
-interface EditorProps {
-  content: string;
-  onChange: (content: string) => void;
-  placeholder?: string;
-  className?: string;
-}
-
 export function Editor({
   content,
   onChange,
   placeholder = 'Start writing...',
+  showToolbar = true,
   className,
-}: EditorProps) {
+}: {
+  content: string;
+  onChange: (content: string) => void;
+  placeholder?: string;
+  showToolbar?: boolean;
+  className?: string;
+}) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: false,
       }),
       Heading.configure({
-        levels: [1, 2, 3],
+        levels: [1, 2, 3, 4],
       }),
       Placeholder.configure({
         placeholder,
@@ -77,84 +78,90 @@ export function Editor({
         className,
       )}
     >
-      <div className="flex flex-wrap gap-1 border-b p-1">
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('bold')}
-          onPressedChange={() => editor.chain().focus().toggleBold().run()}
-          type="button"
-        >
-          <Bold className="h-4 w-4" />
-        </Toggle>
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('italic')}
-          onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-          type="button"
-        >
-          <Italic className="h-4 w-4" />
-        </Toggle>
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('he  ading', { level: 2 })}
-          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          type="button"
-        >
-          <Heading2 className="h-4 w-4" />
-        </Toggle>
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('heading', { level: 3 })}
-          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          type="button"
-        >
-          <Heading3 className="h-4 w-4" />
-        </Toggle>
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('bulletList')}
-          onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
-          type="button"
-        >
-          <List className="h-4 w-4" />
-        </Toggle>
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('orderedList')}
-          onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-          type="button"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </Toggle>
-        <Toggle
-          size="icon"
-          pressed={editor.isActive('link')}
-          onPressedChange={addLink}
-          type="button"
-        >
-          <LinkIcon className="h-4 w-4" />
-        </Toggle>
-        <div className="ml-auto flex gap-1">
-          <Button
-            variant="ghost"
+      {showToolbar && (
+        <div className="flex flex-wrap gap-1 border-b p-1">
+          <Toggle
             size="icon"
-            onClick={() => editor.chain().focus().undo().run()}
-            disabled={!editor.can().undo()}
+            pressed={editor.isActive('bold')}
+            onPressedChange={() => editor.chain().focus().toggleBold().run()}
             type="button"
           >
-            <Undo className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
+            <Bold className="h-4 w-4" />
+          </Toggle>
+          <Toggle
             size="icon"
-            onClick={() => editor.chain().focus().redo().run()}
-            disabled={!editor.can().redo()}
+            pressed={editor.isActive('italic')}
+            onPressedChange={() => editor.chain().focus().toggleItalic().run()}
             type="button"
           >
-            <Redo className="h-4 w-4" />
-          </Button>
+            <Italic className="h-4 w-4" />
+          </Toggle>
+          <Toggle
+            size="icon"
+            pressed={editor.isActive('he  ading', { level: 2 })}
+            onPressedChange={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+            type="button"
+          >
+            <Heading2 className="h-4 w-4" />
+          </Toggle>
+          <Toggle
+            size="icon"
+            pressed={editor.isActive('heading', { level: 3 })}
+            onPressedChange={() =>
+              editor.chain().focus().toggleHeading({ level: 3 }).run()
+            }
+            type="button"
+          >
+            <Heading3 className="h-4 w-4" />
+          </Toggle>
+          <Toggle
+            size="icon"
+            pressed={editor.isActive('bulletList')}
+            onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
+            type="button"
+          >
+            <List className="h-4 w-4" />
+          </Toggle>
+          <Toggle
+            size="icon"
+            pressed={editor.isActive('orderedList')}
+            onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
+            type="button"
+          >
+            <ListOrdered className="h-4 w-4" />
+          </Toggle>
+          <Toggle
+            size="icon"
+            pressed={editor.isActive('link')}
+            onPressedChange={addLink}
+            type="button"
+          >
+            <LinkIcon className="h-4 w-4" />
+          </Toggle>
+          <div className="ml-auto flex gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => editor.chain().focus().undo().run()}
+              disabled={!editor.can().undo()}
+              type="button"
+            >
+              <Undo className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => editor.chain().focus().redo().run()}
+              disabled={!editor.can().redo()}
+              type="button"
+            >
+              <Redo className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
       <div className="min-h-[150px] p-3">
         <EditorContent
           editor={editor}
