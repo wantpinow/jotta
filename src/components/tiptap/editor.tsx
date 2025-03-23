@@ -20,22 +20,23 @@ import {
 import Mention from '@tiptap/extension-mention';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
-import suggestion from '@/components/tiptap/mentions/suggestion';
+
 import { useEffect } from 'react';
+import { mentionSuggestionOptions } from './mentions/mentionSuggestionOptions';
 export function Editor({
   content,
   onChange,
   placeholder = 'Start writing...',
   showToolbar = true,
   className,
-  peopleNames,
+  peopleMentions = false,
 }: {
   content: string;
   onChange: (content: string) => void;
   placeholder?: string;
   showToolbar?: boolean;
   className?: string;
-  peopleNames?: { id: string; name: string }[];
+  peopleMentions?: boolean;
 }) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -52,20 +53,16 @@ export function Editor({
       Link.configure({
         openOnClick: false,
       }),
-      Mention.configure({
-        HTMLAttributes: {
-          class: 'mention',
-          // 'data-id': (node: any) => node.attrs.id,
-        },
-        // renderHTML({ options, node }) {
-        //   return [
-        //     'a',
-        //     mergeAttributes({ href: `/people/${node.attrs.id}` }, options.HTMLAttributes),
-        //     `${options.suggestion.char}${node.attrs.name ?? node.attrs.id}`,
-        //   ];
-        // },
-        suggestion,
-      }),
+      ...(peopleMentions
+        ? [
+            Mention.configure({
+              HTMLAttributes: {
+                class: 'mention',
+              },
+              suggestion: mentionSuggestionOptions,
+            }),
+          ]
+        : []),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -187,7 +184,6 @@ export function Editor({
           )}
         </EditorContent>
       </div>
-      <pre>{JSON.stringify(editor.getHTML(), null, 2)}</pre>
     </div>
   );
 }

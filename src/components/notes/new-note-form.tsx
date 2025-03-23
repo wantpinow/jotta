@@ -66,7 +66,7 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
                   placeholder="Write your note here..."
                   showToolbar={false}
                   className="p-0 bg-muted/50 rounded-md"
-                  peopleNames={peopleNames}
+                  peopleMentions={true}
                 />
               </FormControl>
             </FormItem>
