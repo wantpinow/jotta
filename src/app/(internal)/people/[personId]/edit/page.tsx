@@ -2,7 +2,6 @@ import { PageHeader } from '@/components/page/header';
 import { getPerson } from '@/server/actions/person';
 import { Card, CardContent } from '@/components/ui/card';
 import { EditPersonForm } from '@/components/people/edit-person-form';
-import Link from 'next/link';
 
 export default async function EditPersonPage({
   params,

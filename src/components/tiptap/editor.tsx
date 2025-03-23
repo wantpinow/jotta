@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent, mergeAttributes, JSONContent } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
@@ -25,8 +25,8 @@ import { useEffect } from 'react';
 import {
   MentionSuggestion,
   mentionSuggestionOptions,
-} from './mentions/mentionSuggestionOptions';
-import { getMentionsFromJSON } from './mentions/utils';
+} from '@/components/tiptap/mentions/mentionSuggestionOptions';
+import { getMentionsFromJSON } from '@/components/tiptap/mentions/utils';
 
 export function Editor({
   content,

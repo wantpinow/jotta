@@ -1,7 +1,9 @@
 import type { MentionOptions } from '@tiptap/extension-mention';
 import { ReactRenderer } from '@tiptap/react';
 import tippy, { type Instance as TippyInstance } from 'tippy.js';
-import SuggestionList, { type SuggestionListRef } from './suggestion-list';
+import SuggestionList, {
+  type SuggestionListRef,
+} from '@/components/tiptap/mentions/suggestion-list';
 import { getPeopleNames } from '@/server/actions/person';
 
 export type MentionSuggestion = {

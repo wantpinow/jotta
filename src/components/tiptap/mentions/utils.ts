@@ -1,5 +1,5 @@
 import { JSONContent } from '@tiptap/react';
-import { MentionSuggestion } from './mentionSuggestionOptions';
+import { MentionSuggestion } from '@/components/tiptap/mentions/mentionSuggestionOptions';
 
 export const getMentionsFromJSON = (json: JSONContent) => {
   const allMentions: MentionSuggestion[] = [];

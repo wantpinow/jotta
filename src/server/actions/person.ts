@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth/validate';
 import { db } from '@/server/db';
 import { personTable } from '@/server/db/schema';
-import { and, desc, eq, ilike, like } from 'drizzle-orm';
+import { and, desc, eq, ilike } from 'drizzle-orm';
 import { Person } from '@/server/db/schema/types';
 
 export async function getPeople() {

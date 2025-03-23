@@ -1,6 +1,6 @@
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { MentionSuggestion } from './mentionSuggestionOptions';
+import { MentionSuggestion } from '@/components/tiptap/mentions/mentionSuggestionOptions';
 import { cn } from '@/lib/utils';
 import { SearchIcon, UserIcon } from 'lucide-react';
 
