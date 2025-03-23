@@ -105,6 +105,10 @@ export const noteTable = createTable(
   },
 );
 
+export const noteRelations = relations(noteTable, ({ many }) => ({
+  mentions: many(personNoteMentionTable),
+}));
+
 // people
 export const personTable = createTable(
   'person',
@@ -137,6 +141,10 @@ export const personTable = createTable(
     };
   },
 );
+
+export const personRelations = relations(personTable, ({ many }) => ({
+  mentions: many(personNoteMentionTable),
+}));
 
 // person note mentions
 export const personNoteMentionTable = createTable(
@@ -175,4 +183,18 @@ export const personNoteMentionTable = createTable(
         .onUpdate('cascade'),
     ];
   },
+);
+
+export const personNoteMentionRelations = relations(
+  personNoteMentionTable,
+  ({ one }) => ({
+    person: one(personTable, {
+      fields: [personNoteMentionTable.personId],
+      references: [personTable.id],
+    }),
+    note: one(noteTable, {
+      fields: [personNoteMentionTable.noteId],
+      references: [noteTable.id],
+    }),
+  }),
 );

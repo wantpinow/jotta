@@ -17,6 +17,7 @@ const newNoteFormSchema = z.object({
   content: z.string().min(1, { message: 'Note cannot be empty' }).refine(isFilledHtml, {
     message: 'Note cannot be empty',
   }),
+  mentions: z.array(z.object({ id: z.string(), name: z.string() })),
 });
 
 export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
@@ -25,12 +26,13 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
     resolver: zodResolver(newNoteFormSchema),
     defaultValues: {
       content: '',
+      mentions: [],
     },
   });
   const [isPending, startTransition] = useTransition();
   const onSubmit = (data: z.infer<typeof newNoteFormSchema>) => {
     startTransition(async () => {
-      const note = await createNote({ content: data.content });
+      const note = await createNote({ content: data.content, mentions: data.mentions });
       toast.success('Note saved');
       if (redirectTo) {
         router.push(redirectTo);
@@ -39,17 +41,6 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
       }
     });
   };
-
-  const peopleNames = [
-    {
-      id: '1',
-      name: 'John Doe',
-    },
-    {
-      id: '2',
-      name: 'Bob Smith',
-    },
-  ];
 
   return (
     <Form {...form}>
@@ -67,6 +58,9 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
                   showToolbar={false}
                   className="p-0 bg-muted/50 rounded-md"
                   peopleMentions={true}
+                  onMentionsChange={(mentions) => {
+                    form.setValue('mentions', mentions);
+                  }}
                 />
               </FormControl>
             </FormItem>

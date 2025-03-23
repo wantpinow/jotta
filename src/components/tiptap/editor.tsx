@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
+import { useEditor, EditorContent, mergeAttributes, JSONContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
@@ -22,7 +22,12 @@ import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 
 import { useEffect } from 'react';
-import { mentionSuggestionOptions } from './mentions/mentionSuggestionOptions';
+import {
+  MentionSuggestion,
+  mentionSuggestionOptions,
+} from './mentions/mentionSuggestionOptions';
+import { getMentionsFromJSON } from './mentions/utils';
+
 export function Editor({
   content,
   onChange,
@@ -30,6 +35,7 @@ export function Editor({
   showToolbar = true,
   className,
   peopleMentions = false,
+  onMentionsChange,
 }: {
   content: string;
   onChange: (content: string) => void;
@@ -37,6 +43,7 @@ export function Editor({
   showToolbar?: boolean;
   className?: string;
   peopleMentions?: boolean;
+  onMentionsChange?: (mentions: MentionSuggestion[]) => void;
 }) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -67,6 +74,11 @@ export function Editor({
     content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+      if (onMentionsChange) {
+        const json = editor.getJSON();
+        const mentions = getMentionsFromJSON(json);
+        onMentionsChange(mentions);
+      }
     },
     editorProps: {
       attributes: {

@@ -2,11 +2,12 @@
 
 import { auth } from '@/lib/auth/validate';
 import { db } from '@/server/db';
-import { noteTable } from '@/server/db/schema';
+import { noteTable, personNoteMentionTable } from '@/server/db/schema';
 import { and, eq, desc } from 'drizzle-orm';
-import { Note } from '@/server/db/schema/types';
+import { Note, NoteWithMentions } from '@/server/db/schema/types';
+import { MentionSuggestion } from '@/components/tiptap/mentions/mentionSuggestionOptions';
 
-export async function getOwnNotes(): Promise<Note[]> {
+export async function getOwnNotes(): Promise<NoteWithMentions[]> {
   const { user } = await auth();
   if (!user) {
     throw new Error('Unauthorized');
@@ -14,17 +15,31 @@ export async function getOwnNotes(): Promise<Note[]> {
   const notes = await db.query.noteTable.findMany({
     where: eq(noteTable.userId, user.id),
     orderBy: desc(noteTable.updatedAt),
+    with: {
+      mentions: {
+        with: {
+          person: true,
+        },
+      },
+    },
   });
   return notes;
 }
 
-export async function getNote({ id }: { id: string }): Promise<Note> {
+export async function getNote({ id }: { id: string }): Promise<NoteWithMentions> {
   const { user } = await auth();
   if (!user) {
     throw new Error('Unauthorized');
   }
   const note = await db.query.noteTable.findFirst({
     where: and(eq(noteTable.id, id), eq(noteTable.userId, user.id)),
+    with: {
+      mentions: {
+        with: {
+          person: true,
+        },
+      },
+    },
   });
   if (!note) {
     throw new Error('Note not found');
@@ -32,7 +47,13 @@ export async function getNote({ id }: { id: string }): Promise<Note> {
   return note;
 }
 
-export async function createNote({ content }: { content: string }): Promise<Note> {
+export async function createNote({
+  content,
+  mentions,
+}: {
+  content: string;
+  mentions: MentionSuggestion[];
+}): Promise<Note> {
   const { user } = await auth();
   if (!user) {
     throw new Error('Unauthorized');
@@ -44,6 +65,15 @@ export async function createNote({ content }: { content: string }): Promise<Note
       title: 'Untitled',
       content,
     })
+    .returning();
+  await db
+    .insert(personNoteMentionTable)
+    .values(
+      mentions.map((mention) => ({
+        personId: mention.id,
+        noteId: note.id,
+      })),
+    )
     .returning();
   return note;
 }

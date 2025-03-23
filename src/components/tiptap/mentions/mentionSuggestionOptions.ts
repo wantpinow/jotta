@@ -33,6 +33,8 @@ const DOM_RECT_FALLBACK: DOMRect = {
 };
 
 export const mentionSuggestionOptions: MentionOptions['suggestion'] = {
+  allowSpaces: true,
+  char: '@',
   items: async ({ query }): Promise<MentionSuggestion[]> => {
     const people = await getPeopleNames({ query });
     return people;
@@ -83,12 +85,6 @@ export const mentionSuggestionOptions: MentionOptions['suggestion'] = {
       onExit() {
         popup?.destroy();
         component?.destroy();
-
-        // Remove references to the old popup and component upon destruction/exit.
-        // (This should prevent redundant calls to `popup.destroy()`, which Tippy
-        // warns in the console is a sign of a memory leak, as the `suggestion`
-        // plugin seems to call `onExit` both when a suggestion menu is closed after
-        // a user chooses an option, *and* when the editor itself is destroyed.)
         popup = undefined;
         component = undefined;
       },

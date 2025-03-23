@@ -2,7 +2,7 @@ import { PageHeader } from '@/components/page/header';
 import { getPerson } from '@/server/actions/person';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Pencil } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function PersonPage({
@@ -16,9 +16,6 @@ export default async function PersonPage({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/people" className="flex-none">
-          <ArrowLeft size={32} />
-        </Link>
         <PageHeader
           title={person.name}
           description={`Added on ${format(person.createdAt, 'MMMM d, yyyy')}`}
