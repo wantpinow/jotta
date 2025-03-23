@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { NewNoteForm } from './new-note-form';
+import { NewNoteForm } from '@/app/(internal)/home/_components/new-note-form';
 
 export function NewNoteCard() {
   return (

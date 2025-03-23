@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { NewNoteCard } from './_components/new-note-card';
-import { NotesList } from './_components/notes-list';
+import { NewNoteCard } from '@/app/(internal)/home/_components/new-note-card';
+import { NotesList } from '@/app/(internal)/home/_components/notes-list';
 import { Suspense } from 'react';
 
 export default async function Home() {

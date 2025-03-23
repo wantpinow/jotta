@@ -6,7 +6,7 @@ import { drizzle as drizzlePostgres } from 'drizzle-orm/postgres-js';
 
 import { serverEnv } from '@/env/server';
 
-import * as schema from './schema';
+import * as schema from '@/server/db/schema';
 
 export const initializePg = () => {
   const globalForDb = globalThis as unknown as {

@@ -1,5 +1,5 @@
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import * as schema from '../schema';
+import * as schema from '@/server/db/schema';
 
 export async function seedUsers(db: PostgresJsDatabase<typeof schema>) {
   // database teardown

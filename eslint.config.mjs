@@ -27,6 +27,23 @@ const eslintConfig = [
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       'prettier/prettier': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['../*'],
+              message:
+                'Relative imports are not allowed. Use absolute imports with @/ prefix instead.',
+            },
+            {
+              group: ['./*'],
+              message:
+                'Relative imports are not allowed. Use absolute imports with @/ prefix instead.',
+            },
+          ],
+        },
+      ],
     },
   },
 ];

@@ -1,4 +1,4 @@
-import { SignInEmailForm } from './_components/sign-in-email-form';
+import { SignInEmailForm } from '@/app/(auth)/sign-in/email/_components/sign-in-email-form';
 
 export default async function SignInEmailPage({
   searchParams,

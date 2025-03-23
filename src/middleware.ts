@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { serverEnv } from './env/server';
+import { serverEnv } from '@/env/server';
 
 export async function middleware(request: NextRequest) {
   // don't allow access to /testing/* when running in production

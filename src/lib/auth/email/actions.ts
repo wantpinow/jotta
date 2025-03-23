@@ -2,10 +2,10 @@
 
 import { sha256 } from '@noble/hashes/sha2';
 
-import { emailSignInSchema } from './validate';
+import { emailSignInSchema } from '@/lib/auth/email/validate';
 import { db } from '@/server/db';
 import { userTable } from '@/server/db/schema';
-import { lucia, signUpRedirect } from '..';
+import { lucia, signUpRedirect } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { and, eq } from 'drizzle-orm';
 import { redirect as redirectNavigation } from 'next/navigation';

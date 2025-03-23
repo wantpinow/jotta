@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 
-import { initializePg } from '../index';
+import { initializePg } from '@/server/db';
 
 export const runMigrations = async () => {
   // dummy for now, just to make it run

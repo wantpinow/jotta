@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { transcribeAudio } from './_actions/transcribe';
+import { transcribeAudio } from '@/app/testing/transcribe/_actions/transcribe';
 
 export default function TranscribePage() {
   const [isRecording, setIsRecording] = useState(false);

@@ -1,10 +1,10 @@
 import { Brain } from 'lucide-react';
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth/validate';
 import { cn } from '@/lib/utils';
-import { GradientBubble } from '../misc/gradient-bubble';
+import { GradientBubble } from '@/components/misc/gradient-bubble';
 
 export async function TopNav({ className }: { className?: string }) {
   const { user } = await auth();

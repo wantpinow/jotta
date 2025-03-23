@@ -1,5 +1,5 @@
-import { initializePg } from '..';
-import { seedUsers } from './users';
+import { initializePg } from '@/server/db';
+import { seedUsers } from '@/server/db/seed/users';
 
 export const { conn, db } = initializePg();
 

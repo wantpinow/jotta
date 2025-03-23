@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { generateSession } from './_actions/transcribe';
+import { generateSession } from '@/app/testing/transcribe-realtime/_actions/transcribe';
 import { Button } from '@/components/ui/button';
 
 export default function TranscribeRealtimePage() {
