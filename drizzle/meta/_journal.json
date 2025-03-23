@@ -15,6 +15,13 @@
       "when": 1742662118905,
       "tag": "0001_wealthy_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742725568279,
+      "tag": "0002_solid_wasp",
+      "breakpoints": true
     }
   ]
 }

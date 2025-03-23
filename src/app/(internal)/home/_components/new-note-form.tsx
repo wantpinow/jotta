@@ -13,11 +13,35 @@ const newNoteSchema = z.object({
   content: z.string().min(1),
 });
 
+const exampleContent = `
+<h2>Hello</h2>
+<p>I am a software engineer.</p>
+
+<h3>About me</h3>
+<p>I am a software engineer with a passion for building products that help people.</p>
+
+<h3>My projects</h3>
+<ul>
+  <li><a href="https://project1.com">Project 1</a></li>
+  <li><a href="https://project2.com">Project 2</a></li>
+  <li><a href="https://project3.com">Project 3</a></li>
+</ul>
+
+<h3>My skills</h3>
+<ol>
+  <li>Skill 1</li>
+  <li>Skill 2</li>
+  <li>Skill 3</li>
+</ol>
+
+<h3>My experience</h3>
+`;
+
 export function NewNoteForm() {
   const form = useForm<z.infer<typeof newNoteSchema>>({
     resolver: zodResolver(newNoteSchema),
     defaultValues: {
-      content: '',
+      content: exampleContent,
     },
   });
   const onSubmit = (values: z.infer<typeof newNoteSchema>) => {

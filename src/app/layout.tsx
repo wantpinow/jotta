@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
-
+import { TopNav } from '@/components/nav/topnav';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -26,7 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <TopNav className="fixed" />
+        <main className="pt-22 pb-12 min-h-screen bg-muted">
+          <div className="container px-4 mx-auto">{children}</div>
+        </main>
         <Toaster />
       </body>
     </html>

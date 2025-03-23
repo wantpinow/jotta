@@ -75,6 +75,7 @@ export const sessionRelations = relations(sessionTable, ({ one }) => ({
 export const noteTable = createTable('note', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id').notNull(),
+  title: varchar('title', { length: 256 }).notNull(),
   content: text('content').notNull(),
   createdAt: timestamp('created_at', {
     withTimezone: true,
