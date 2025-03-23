@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
@@ -21,6 +21,7 @@ import Mention from '@tiptap/extension-mention';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import suggestion from '@/components/tiptap/mentions/suggestion';
+import { useEffect } from 'react';
 export function Editor({
   content,
   onChange,
@@ -54,7 +55,15 @@ export function Editor({
       Mention.configure({
         HTMLAttributes: {
           class: 'mention',
+          // 'data-id': (node: any) => node.attrs.id,
         },
+        // renderHTML({ options, node }) {
+        //   return [
+        //     'a',
+        //     mergeAttributes({ href: `/people/${node.attrs.id}` }, options.HTMLAttributes),
+        //     `${options.suggestion.char}${node.attrs.name ?? node.attrs.id}`,
+        //   ];
+        // },
         suggestion,
       }),
     ],
@@ -68,6 +77,11 @@ export function Editor({
       },
     },
   });
+
+  // automatically focus the editor when the component mounts
+  useEffect(() => {
+    editor?.chain().focus().run();
+  }, [editor]);
 
   if (!editor) {
     return null;

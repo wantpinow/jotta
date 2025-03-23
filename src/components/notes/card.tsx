@@ -15,10 +15,10 @@ export function NoteCard({ note }: { note: Note }) {
               <Clock size={12} />
               {format(note.updatedAt, 'HH:mm a')}
             </p>
-            <div className="bg-secondary/20 text-secondary rounded px-1.5 py-[0.15rem] text-xs font-semibold">
+            <div className="bg-secondary/10 text-secondary rounded px-1.5 py-[0.15rem] text-xs font-semibold">
               Shopping
             </div>
-            <div className="bg-primary/20 text-primary rounded px-1.5 py-[0.15rem] text-xs font-semibold flex gap-1 items-center">
+            <div className="bg-primary/10 text-primary rounded px-1.5 py-[0.15rem] text-xs font-semibold flex gap-1 items-center">
               <User className="fill-primary" size={12} />
               Patrick
             </div>

@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth/validate';
 import { db } from '@/server/db';
 import { personTable } from '@/server/db/schema';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, like } from 'drizzle-orm';
 import { Person } from '@/server/db/schema/types';
 
 export async function getPeople() {
@@ -18,13 +18,17 @@ export async function getPeople() {
   return people;
 }
 
-export async function getPeopleNames(): Promise<{ id: string; name: string }[]> {
+export async function getPeopleNames({
+  query,
+}: {
+  query: string;
+}): Promise<{ id: string; name: string }[]> {
   const { user } = await auth();
   if (!user) {
     throw new Error('User not found');
   }
   const people = await db.query.personTable.findMany({
-    where: eq(personTable.userId, user.id),
+    where: and(eq(personTable.userId, user.id), like(personTable.name, `%${query}%`)),
     orderBy: desc(personTable.updatedAt),
     columns: {
       id: true,

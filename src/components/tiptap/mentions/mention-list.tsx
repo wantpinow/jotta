@@ -2,14 +2,20 @@ import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'rea
 import { cn } from '@/lib/utils';
 
 export default forwardRef(
-  (props: { items: string[]; command: ({ id }: { id: string }) => void }, ref) => {
+  (
+    props: {
+      items: { id: string; name: string }[];
+      command: ({ id, name }: { id: string; name: string }) => void;
+    },
+    ref,
+  ) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const selectItem = (index: number) => {
       const item = props.items[index];
 
       if (item) {
-        props.command({ id: item });
+        props.command(item);
       }
     };
 
@@ -60,7 +66,7 @@ export default forwardRef(
               )}
               onClick={() => selectItem(index)}
             >
-              {item}
+              {item.name}
             </button>
           ))
         ) : (
