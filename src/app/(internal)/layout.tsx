@@ -22,7 +22,7 @@ export default async function InternalLayout({
   const userFieldsToCheck = ['firstName', 'lastName'] as const;
   const userHasRequiredFields = userFieldsToCheck.every((field) => user[field]);
   if (userHasRequiredFields) {
-    return children;
+    return <div className="py-6 max-w-3xl mx-auto space-y-6">{children}</div>;
   }
 
   return (

@@ -72,12 +72,7 @@ export function Editor({
   };
 
   return (
-    <div
-      className={cn(
-        'flex flex-col bg-background text-sm rounded-md shadow-sm',
-        className,
-      )}
-    >
+    <div className={cn('flex flex-col text-sm', className)}>
       {showToolbar && (
         <div className="flex flex-wrap gap-1 border-b p-1">
           <Toggle
@@ -165,8 +160,12 @@ export function Editor({
       <div className="min-h-[150px] p-3">
         <EditorContent
           editor={editor}
-          className="prose prose-sm dark:prose-invert prose-headings:font-bold prose-h1:text-4xl prose-h1:font-extrabold prose-h2:text-2xl prose-h3:text-xl prose-p:my-2 prose-p:leading-relaxed prose-li:my-1 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-ul:pl-5 prose-ol:pl-5 [&:focus]:outline-none [&_*:focus]:outline-none"
-        />
+          className="relative prose prose-sm dark:prose-invert prose-headings:font-bold prose-h1:text-4xl prose-h1:font-extrabold prose-h2:text-2xl prose-h3:text-xl prose-p:my-2 prose-p:leading-relaxed prose-li:my-1 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-ul:pl-5 prose-ol:pl-5 [&:focus]:outline-none [&_*:focus]:outline-none"
+        >
+          {editor.getText() === '' && (
+            <p className="absolute top-0 left-0 text-muted-foreground">{placeholder}</p>
+          )}
+        </EditorContent>
       </div>
     </div>
   );
