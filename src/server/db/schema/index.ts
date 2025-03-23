@@ -2,6 +2,7 @@ import { relations, sql } from 'drizzle-orm';
 import {
   foreignKey,
   pgTableCreator,
+  primaryKey,
   text,
   timestamp,
   uuid,
@@ -72,20 +73,106 @@ export const sessionRelations = relations(sessionTable, ({ one }) => ({
 }));
 
 // notes
-export const noteTable = createTable('note', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  userId: uuid('user_id').notNull(),
-  title: varchar('title', { length: 256 }).notNull(),
-  content: text('content').notNull(),
-  createdAt: timestamp('created_at', {
-    withTimezone: true,
-  })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp('updated_at', {
-    withTimezone: true,
-  })
-    .$onUpdate(() => new Date())
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-});
+export const noteTable = createTable(
+  'note',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').notNull(),
+    title: varchar('title', { length: 256 }).notNull(),
+    content: text('content').notNull(),
+    createdAt: timestamp('created_at', {
+      withTimezone: true,
+    })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: true,
+    })
+      .$onUpdate(() => new Date())
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => {
+    return {
+      userReference: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [userTable.id],
+        name: 'note_user_fkey',
+      })
+        .onDelete('cascade')
+        .onUpdate('cascade'),
+    };
+  },
+);
+
+// people
+export const personTable = createTable(
+  'person',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').notNull(),
+    name: varchar('name', { length: 256 }).notNull(),
+    description: text('description'),
+    createdAt: timestamp('created_at', {
+      withTimezone: true,
+    })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: true,
+    })
+      .$onUpdate(() => new Date())
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => {
+    return {
+      userReference: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [userTable.id],
+        name: 'person_user_fkey',
+      })
+        .onDelete('cascade')
+        .onUpdate('cascade'),
+    };
+  },
+);
+
+// person note mentions
+export const personNoteMentionTable = createTable(
+  'person_note_mention',
+  {
+    personId: uuid('person_id').notNull(),
+    noteId: uuid('note_id').notNull(),
+    createdAt: timestamp('created_at', {
+      withTimezone: true,
+    })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: true,
+    })
+      .$onUpdate(() => new Date())
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => {
+    return [
+      primaryKey({ columns: [table.personId, table.noteId] }),
+      foreignKey({
+        columns: [table.personId],
+        foreignColumns: [personTable.id],
+        name: 'person_note_mention_person_fkey',
+      })
+        .onDelete('cascade')
+        .onUpdate('cascade'),
+      foreignKey({
+        columns: [table.noteId],
+        foreignColumns: [noteTable.id],
+        name: 'person_note_mention_note_fkey',
+      })
+        .onDelete('cascade')
+        .onUpdate('cascade'),
+    ];
+  },
+);

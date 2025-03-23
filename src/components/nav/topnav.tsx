@@ -9,18 +9,31 @@ import { GradientBubble } from '@/components/misc/gradient-bubble';
 export async function TopNav({ className }: { className?: string }) {
   const { user } = await auth();
   return (
-    <header
+    <nav
       className={cn('border-b border-primary/15 bg-background w-full z-50', className)}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href={user ? '/home' : '/'}>
-            <button className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center space-x-6">
+            <Link href={user ? '/home' : '/'} className="flex items-center gap-2">
               <Brain className="text-primary" size={24} />
               <span className="text-xl font-semibold text-primary">Jotta</span>
-            </button>
-          </Link>
-          <nav className="flex items-center space-x-6">
+            </Link>
+            <div className="h-9 bg-muted w-[2px]" />
+            <Link
+              href="/home"
+              className="text-sm text-muted-foreground hover:text-primary cursor-pointer"
+            >
+              Notes
+            </Link>
+            <Link
+              href="/people"
+              className="text-sm text-muted-foreground hover:text-primary cursor-pointer"
+            >
+              People
+            </Link>
+          </div>
+          <div className="flex items-center space-x-6">
             {user ? (
               <>
                 <Button variant="ghost" size="icon">
@@ -45,9 +58,9 @@ export async function TopNav({ className }: { className?: string }) {
                 <Link href="/sign-in">Sign in</Link>
               </Button>
             )}
-          </nav>
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

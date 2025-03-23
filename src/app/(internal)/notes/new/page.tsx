@@ -1,25 +1,17 @@
 import { NewNoteForm } from '@/components/notes/new-note-form';
+import { PageHeader } from '@/components/page/header';
 import { Card, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Clock, Save } from 'lucide-react';
 
-export default async function NewNotePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>;
-}) {
-  const { type } = await searchParams;
+export default async function NewNotePage() {
   const currentDate = new Date();
   return (
     <div className="space-y-6">
-      <div className="space-y-0.5">
-        <h1 className="text-4xl font-light text-primary">
-          {type === 'voice' ? 'Voice Note' : 'New Entry'}
-        </h1>
-        <p className="text-muted-foreground font-regular">
-          {format(currentDate, 'EEEE, MMMM d, yyyy')}
-        </p>
-      </div>
+      <PageHeader
+        title="New Entry"
+        description={format(currentDate, 'EEEE, MMMM d, yyyy')}
+      />
       <div className="space-y-3">
         <Card>
           <CardContent className="space-y-3">

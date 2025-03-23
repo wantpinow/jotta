@@ -123,6 +123,7 @@
   /* Remove focus outlines from TipTap editor while preserving styles */
   .ProseMirror {
     outline: none !important;
+    font-size: var(--text-sm);
   }
 
   .ProseMirror:focus {

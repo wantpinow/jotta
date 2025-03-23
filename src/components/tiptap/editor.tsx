@@ -158,10 +158,7 @@ export function Editor({
         </div>
       )}
       <div className="min-h-[150px] p-3">
-        <EditorContent
-          editor={editor}
-          className="relative prose prose-sm dark:prose-invert prose-headings:font-bold prose-h1:text-4xl prose-h1:font-extrabold prose-h2:text-2xl prose-h3:text-xl prose-p:my-2 prose-p:leading-relaxed prose-li:my-1 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-ul:pl-5 prose-ol:pl-5 [&:focus]:outline-none [&_*:focus]:outline-none"
-        >
+        <EditorContent editor={editor} className="relative">
           {editor.getText() === '' && (
             <p className="absolute top-0 left-0 text-muted-foreground">{placeholder}</p>
           )}

@@ -1,4 +1,6 @@
+import { PageHeader } from '@/components/page/header';
 import { getNote } from '@/server/actions/notes';
+import { format } from 'date-fns';
 
 export default async function NotePage({
   params,
@@ -7,5 +9,12 @@ export default async function NotePage({
 }) {
   const { noteId } = await params;
   const note = await getNote({ id: noteId });
-  return <pre>{JSON.stringify(note, null, 2)}</pre>;
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title={note.title}
+        description={format(note.updatedAt, 'EEEE, MMMM d, yyyy')}
+      />
+    </div>
+  );
 }

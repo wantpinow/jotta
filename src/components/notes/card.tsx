@@ -1,7 +1,7 @@
-import { User } from 'lucide-react';
+import { Clock, User } from 'lucide-react';
 import { Note } from '@/server/db/schema/types';
 import { Card, CardContent } from '@/components/ui/card';
-import { formatDate } from 'date-fns';
+import { format } from 'date-fns';
 import { NoteCardActions } from '@/components/notes/card-actions';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -11,8 +11,9 @@ export function NoteCard({ note }: { note: Note }) {
       <CardContent className="space-y-3">
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
-            <p className="text-[13px] font-semibold text-muted-foreground">
-              {formatDate(note.updatedAt, 'HH:mm a')}
+            <p className="text-[13px] font-semibold text-muted-foreground flex gap-1.5 items-center">
+              <Clock size={12} />
+              {format(note.updatedAt, 'HH:mm a')}
             </p>
             <div className="bg-secondary/20 text-secondary rounded px-1.5 py-[0.15rem] text-xs font-semibold">
               Shopping
