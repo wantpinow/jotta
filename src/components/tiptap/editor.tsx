@@ -17,21 +17,24 @@ import {
   Undo,
   Redo,
 } from 'lucide-react';
+import Mention from '@tiptap/extension-mention';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
-
+import suggestion from '@/components/tiptap/mentions/suggestion';
 export function Editor({
   content,
   onChange,
   placeholder = 'Start writing...',
   showToolbar = true,
   className,
+  peopleNames,
 }: {
   content: string;
   onChange: (content: string) => void;
   placeholder?: string;
   showToolbar?: boolean;
   className?: string;
+  peopleNames?: { id: string; name: string }[];
 }) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -47,6 +50,12 @@ export function Editor({
       }),
       Link.configure({
         openOnClick: false,
+      }),
+      Mention.configure({
+        HTMLAttributes: {
+          class: 'mention',
+        },
+        suggestion,
       }),
     ],
     content,
@@ -164,6 +173,7 @@ export function Editor({
           )}
         </EditorContent>
       </div>
+      <pre>{JSON.stringify(editor.getHTML(), null, 2)}</pre>
     </div>
   );
 }

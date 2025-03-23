@@ -18,6 +18,22 @@ export async function getPeople() {
   return people;
 }
 
+export async function getPeopleNames(): Promise<{ id: string; name: string }[]> {
+  const { user } = await auth();
+  if (!user) {
+    throw new Error('User not found');
+  }
+  const people = await db.query.personTable.findMany({
+    where: eq(personTable.userId, user.id),
+    orderBy: desc(personTable.updatedAt),
+    columns: {
+      id: true,
+      name: true,
+    },
+  });
+  return people;
+}
+
 export async function createPerson({
   name,
   description,

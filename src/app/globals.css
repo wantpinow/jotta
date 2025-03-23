@@ -202,4 +202,16 @@
   .ProseMirror a:hover {
     text-decoration: underline;
   }
+
+  /* Mention styles */
+  .ProseMirror .mention {
+    background-color: oklch(from var(--primary) l c h / 10%);
+    border-radius: 0.4rem;
+    box-decoration-break: clone;
+    color: var(--primary);
+    padding: 0.15rem 0.3rem;
+    &::after {
+      content: '\200B';
+    }
+  }
 }

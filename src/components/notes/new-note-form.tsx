@@ -39,6 +39,18 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
       }
     });
   };
+
+  const peopleNames = [
+    {
+      id: '1',
+      name: 'John Doe',
+    },
+    {
+      id: '2',
+      name: 'Bob Smith',
+    },
+  ];
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -54,6 +66,7 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
                   placeholder="Write your note here..."
                   showToolbar={false}
                   className="p-0 bg-muted/50 rounded-md"
+                  peopleNames={peopleNames}
                 />
               </FormControl>
             </FormItem>
