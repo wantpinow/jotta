@@ -66,15 +66,17 @@ export async function createNote({
       content,
     })
     .returning();
-  await db
-    .insert(personNoteMentionTable)
-    .values(
-      mentions.map((mention) => ({
-        personId: mention.id,
-        noteId: note.id,
-      })),
-    )
-    .returning();
+  if (mentions.length > 0) {
+    await db
+      .insert(personNoteMentionTable)
+      .values(
+        mentions.map((mention) => ({
+          personId: mention.id,
+          noteId: note.id,
+        })),
+      )
+      .returning();
+  }
   return note;
 }
 

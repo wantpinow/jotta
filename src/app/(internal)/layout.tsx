@@ -26,14 +26,19 @@ export default async function InternalLayout({
   }
 
   return (
-    <Dialog open>
-      <DialogContent closeButton={false}>
-        <DialogHeader>
-          <DialogTitle>Welcome to Jotta!</DialogTitle>
-          <DialogDescription>Please complete your profile to continue.</DialogDescription>
-        </DialogHeader>
-        <UserOnboardingForm user={user} />
-      </DialogContent>
-    </Dialog>
+    <>
+      {children}
+      <Dialog open>
+        <DialogContent closeButton={false} className="rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>Welcome to Jotta!</DialogTitle>
+            <DialogDescription>
+              Please complete your profile to continue.
+            </DialogDescription>
+          </DialogHeader>
+          <UserOnboardingForm user={user} />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

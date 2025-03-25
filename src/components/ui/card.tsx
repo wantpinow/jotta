@@ -38,6 +38,16 @@ function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+function CardSubtitle({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="card-subtitle"
+      className={cn('leading-none text-sm font-semibold', className)}
+      {...props}
+    />
+  );
+}
+
 function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -80,6 +90,7 @@ export {
   CardHeader,
   CardFooter,
   CardTitle,
+  CardSubtitle,
   CardAction,
   CardDescription,
   CardContent,

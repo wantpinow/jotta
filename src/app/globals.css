@@ -85,9 +85,9 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.6493 0.2305 265.03);
+  --primary: oklch(51.03% 0.2299 278.93);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: oklch(0.65 0.2 200);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
@@ -206,12 +206,20 @@
   /* Mention styles */
   .ProseMirror .mention {
     background-color: oklch(from var(--primary) l c h / 10%);
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     color: var(--primary);
     box-decoration-break: clone;
-    padding: 0.15rem 0.4rem;
+    padding: 0.1rem 0.4rem;
     &::after {
       content: '\200B';
     }
+  }
+
+  /* Dark mode mention styles */
+  .dark .ProseMirror .mention {
+    background-color: transparent;
+    color: var(--primary);
+    font-weight: 600;
+    padding: 0rem;
   }
 }

@@ -16,6 +16,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { useTheme } from 'next-themes';
+import { MoonIcon } from 'lucide-react';
+import { SunIcon } from 'lucide-react';
+
 const userOnboardingFormSchema = z.object({
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
@@ -23,6 +27,7 @@ const userOnboardingFormSchema = z.object({
 
 export function UserOnboardingForm({ user }: { user: DatabaseUserAttributes }) {
   const router = useRouter();
+  const { setTheme, theme } = useTheme();
   const form = useForm<z.infer<typeof userOnboardingFormSchema>>({
     resolver: zodResolver(userOnboardingFormSchema),
     defaultValues: {
@@ -65,7 +70,29 @@ export function UserOnboardingForm({ user }: { user: DatabaseUserAttributes }) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="block ml-auto">
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant={theme === 'light' ? 'accent' : 'outline'}
+            onClick={() => setTheme('light')}
+            type="button"
+            className="h-16"
+            disabled={theme === 'light'}
+          >
+            <SunIcon className="w-4 h-4" />
+            Light Mode
+          </Button>
+          <Button
+            variant={theme === 'dark' ? 'accent' : 'outline'}
+            onClick={() => setTheme('dark')}
+            type="button"
+            className="h-16"
+            disabled={theme === 'dark'}
+          >
+            <MoonIcon className="w-4 h-4" />
+            Dark Mode
+          </Button>
+        </div>
+        <Button type="submit" className="block w-full ml-auto">
           Save Profile
         </Button>
       </form>

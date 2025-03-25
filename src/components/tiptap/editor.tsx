@@ -92,6 +92,13 @@ export function Editor({
     editor?.chain().focus().run();
   }, [editor]);
 
+  // Sync content prop changes with editor state
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.chain().focus().setContent(content).run();
+    }
+  }, [content, editor]);
+
   if (!editor) {
     return null;
   }

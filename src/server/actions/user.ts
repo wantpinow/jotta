@@ -21,3 +21,12 @@ export async function updateUser(userUpdates: Partial<DatabaseUserAttributes>) {
     .returning();
   return null;
 }
+
+export async function deleteUser() {
+  const { user: userFromSession } = await auth();
+  if (!userFromSession) {
+    throw new Error('Unauthorized');
+  }
+  await db.delete(userTable).where(eq(userTable.id, userFromSession.id)).returning();
+  return null;
+}

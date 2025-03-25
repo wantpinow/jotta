@@ -94,7 +94,7 @@ export function NoteCard({ note }: { note: NoteWithMentions }) {
               <Link
                 key={mention.personId}
                 href={`/people/${mention.personId}`}
-                className="hover:opacity-70 transition-opacity duration-100 whitespace-nowrap bg-primary/10 text-primary rounded px-1.5 py-[0.15rem] text-xs font-semibold flex gap-1 items-center"
+                className="hover:opacity-70 transition-opacity duration-100 whitespace-nowrap bg-primary/10 dark:bg-primary text-primary dark:text-foreground rounded px-1.5 py-[0.15rem] text-xs font-semibold flex gap-1 items-center"
               >
                 <User className="fill-primary flex-none" size={12} />
                 {mentionsFirstNamesMap[mention.personId] ?? mention.person.name}

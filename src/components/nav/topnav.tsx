@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth/validate';
 import { cn } from '@/lib/utils';
 import { GradientBubble } from '@/components/misc/gradient-bubble';
+import { TopNavLinks } from './topnav-links';
+import NotificationsPopover from './notifications-popover';
 
 export async function TopNav({ className }: { className?: string }) {
   const { user } = await auth();
@@ -15,38 +17,30 @@ export async function TopNav({ className }: { className?: string }) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-6">
-            <Link href={user ? '/home' : '/'} className="flex items-center gap-2">
-              <Brain className="text-primary" size={24} />
-              <span className="text-xl font-semibold text-primary">Jotta</span>
+            <Link
+              href={user ? '/home' : '/'}
+              className="flex items-center gap-2 text-primary dark:text-foreground"
+            >
+              <Brain size={24} />
+              <span className="text-xl font-semibold tracking-wider">Jotta</span>
             </Link>
             <div className="h-9 bg-muted w-[2px]" />
-            <Link
-              href="/home"
-              className="text-sm text-muted-foreground hover:text-primary cursor-pointer"
-            >
-              Notes
-            </Link>
-            <Link
-              href="/people"
-              className="text-sm text-muted-foreground hover:text-primary cursor-pointer"
-            >
-              People
-            </Link>
+            {user && <TopNavLinks />}
           </div>
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <Button variant="ghost" size="icon">
+                {/* <Button variant="ghost" size="icon">
                   <Bell className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                </Button>
-                {/* <Link href="/profile" className="bg-red-500 size-7 rounded-full"></Link> */}
+                </Button> */}
+                <NotificationsPopover />
                 <GradientBubble
                   seed={user.id}
                   size={32}
-                  className="border border-border shadow-xs cursor-pointer hover:opacity-80 transition-opacity duration-100 rounded-full"
+                  className="border border-border dark:border-0 shadow-xs cursor-pointer hover:opacity-80 transition-opacity duration-100 rounded-full"
                   asChild
                 >
-                  <Link href="/profile"></Link>
+                  <Link href="/settings"></Link>
                 </GradientBubble>
               </>
             ) : (

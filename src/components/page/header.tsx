@@ -7,7 +7,7 @@ export function PageHeader({
 }) {
   return (
     <div className="space-y-0.5">
-      <h1 className="text-4xl font-light text-primary">{title}</h1>
+      <h1 className="text-4xl font-light text-primary dark:text-foreground">{title}</h1>
       {description && <p className="text-muted-foreground font-regular">{description}</p>}
     </div>
   );
