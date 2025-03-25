@@ -1,12 +1,11 @@
 import { Brain } from 'lucide-react';
-import { Bell } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth/validate';
 import { cn } from '@/lib/utils';
 import { GradientBubble } from '@/components/misc/gradient-bubble';
-import { TopNavLinks } from './topnav-links';
-import NotificationsPopover from './notifications-popover';
+import { TopNavLinks } from '@/components/nav/topnav-links';
+import NotificationsPopover from '@/components/nav/notifications-popover';
 
 export async function TopNav({ className }: { className?: string }) {
   const { user } = await auth();

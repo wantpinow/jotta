@@ -8,8 +8,8 @@ import {
   CardSubtitle,
 } from '@/components/ui/card';
 import { auth } from '@/lib/auth/validate';
-import { UserNameForm } from './_components/name-form';
-import { DeleteAccountDialog } from './_components/delete-account';
+import { UserNameForm } from '@/app/(internal)/settings/account/_components/name-form';
+import { DeleteAccountDialog } from '@/app/(internal)/settings/account/_components/delete-account';
 
 export default async function SettingsAccountPage() {
   const { user } = await auth();
@@ -32,7 +32,7 @@ export default async function SettingsAccountPage() {
         </div>
         <div className="space-y-4 py-4">
           <CardSubtitle>Danger Zone</CardSubtitle>
-          <DeleteAccountDialog user={user}>
+          <DeleteAccountDialog>
             <Button size="sm" variant="outline">
               Delete Account
             </Button>

@@ -39,7 +39,8 @@ export default function NotificationsPopover() {
               </div>
               <h4 className="text-sm font-medium">No notifications</h4>
               <p className="text-xs text-muted-foreground mt-1">
-                You're all caught up! We'll notify you when something new arrives.
+                You&apos;re all caught up! We&apos;ll notify you when something new
+                arrives.
               </p>
             </div>
           </div>

@@ -11,7 +11,7 @@ import { isFilledHtml } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { createNote } from '@/server/actions/notes';
 import { useState, useTransition } from 'react';
-import { AudioRecorder } from '../misc/audio-recorder';
+import { AudioRecorder } from '@/components/misc/audio-recorder';
 import { transcribeAudioFile } from '@/server/actions/transcribe';
 
 const newNoteFormSchema = z.object({

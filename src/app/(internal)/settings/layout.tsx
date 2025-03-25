@@ -1,6 +1,6 @@
 import { PageHeader } from '@/components/page/header';
-import { SettingsSidebar } from './_components/sidebar';
-import { Card, CardContent } from '@/components/ui/card';
+import { SettingsSidebar } from '@/app/(internal)/settings/_components/sidebar';
+import { Card } from '@/components/ui/card';
 export default async function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="space-y-6">

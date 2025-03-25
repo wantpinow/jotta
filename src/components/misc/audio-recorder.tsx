@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { AudioLines, Circle, Loader2, Mic } from 'lucide-react';
 import {
   Dialog,
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog';
+} from '@/components/ui/dialog';
 
 export function AudioRecorder({
   audioFiles,
@@ -107,7 +107,7 @@ export function AudioRecorder({
           clearInterval(interval.current);
         }
       };
-    } catch (err) {
+    } catch {
       toast.error(
         'Error accessing microphone. Please ensure you have granted permission.',
       );

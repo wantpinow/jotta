@@ -11,19 +11,12 @@ import {
   AlertDialogContent,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { DatabaseUserAttributes } from '@/lib/auth';
 import { deleteUser } from '@/server/actions/user';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
-export function DeleteAccountDialog({
-  children,
-  user,
-}: {
-  children: React.ReactNode;
-  user: DatabaseUserAttributes;
-}) {
+export function DeleteAccountDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [isDeleting, startDelete] = useTransition();
