@@ -14,6 +14,10 @@ export function TopNavLinks() {
       href: '/people',
       label: 'People',
     },
+    {
+      href: '/activities',
+      label: 'Activities',
+    },
   ];
   return (
     <>
