@@ -10,8 +10,8 @@ export default function TestingActionsPage() {
       if (!data) return;
       toast.success(JSON.stringify(data));
     },
-    onError: (error) => {
-      toast.error('an error o curd');
+    onError: () => {
+      toast.error('an error occured');
     },
   });
   return (

@@ -74,8 +74,8 @@ export function SignInEmailForm({ redirect }: { redirect?: string }) {
         <Button
           type="submit"
           className="ml-auto block"
-          // loading={isExecuting}
-          // loadingMessage="Signing in..."
+          loading={isExecuting}
+          loadingMessage="Signing in..."
         >
           Sign In
         </Button>

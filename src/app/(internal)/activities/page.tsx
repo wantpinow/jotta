@@ -1,13 +1,6 @@
-import { auth } from '@/lib/auth/validate';
-import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { MicIcon, PlusIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import {
-  NotesList,
-  NotesListSkeleton,
-} from '@/app/(internal)/home/_components/notes-list';
-import { Suspense } from 'react';
 import { PageHeader } from '@/components/page/header';
 
 export default async function ActivitiesPage() {

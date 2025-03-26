@@ -4,7 +4,7 @@ import { db } from '@/server/db';
 import { eq } from 'drizzle-orm';
 import { userTable } from '@/server/db/schema';
 import { authenticatedAction } from '@/server/actions/safe-action';
-import { updateUserSchema } from './schemas';
+import { updateUserSchema } from '@/server/actions/users/schemas';
 
 export const updateUser = authenticatedAction
   .schema(updateUserSchema)
