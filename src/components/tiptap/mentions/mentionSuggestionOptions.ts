@@ -38,7 +38,8 @@ export const mentionSuggestionOptions: MentionOptions['suggestion'] = {
   allowSpaces: true,
   char: '@',
   items: async ({ query }): Promise<MentionSuggestion[]> => {
-    const people = await getPeopleNames({ query });
+    const people = (await getPeopleNames({ query }))?.data;
+    if (!people) return [];
     return people;
   },
   render: () => {

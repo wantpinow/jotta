@@ -3,36 +3,41 @@
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { DatabaseUserAttributes } from '@/lib/auth';
-import { updateUser } from '@/server/actions/user';
+import { updateUser } from '@/server/actions/users/actions';
+import { updateUserSchema } from '@/server/actions/users/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const userOnboardingFormSchema = z.object({
-  firstName: z.string().min(1, { message: 'First name is required' }),
-  lastName: z.string().min(1, { message: 'Last name is required' }),
-});
-
 export function UserNameForm({ user }: { user: DatabaseUserAttributes }) {
-  const router = useRouter();
-  const form = useForm<z.infer<typeof userOnboardingFormSchema>>({
-    resolver: zodResolver(userOnboardingFormSchema),
+  const form = useForm<z.infer<typeof updateUserSchema>>({
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
       firstName: user.firstName ?? '',
       lastName: user.lastName ?? '',
     },
   });
-  const onSubmit = async (values: z.infer<typeof userOnboardingFormSchema>) => {
-    await updateUser({
-      firstName: values.firstName,
-      lastName: values.lastName,
-    });
-    toast.success('Name updated');
-    form.reset(values);
-    router.refresh();
+
+  const { execute } = useAction(updateUser, {
+    onSuccess: ({ data }) => {
+      if (!data) return;
+      toast.success('Name updated');
+      form.reset({
+        firstName: data.firstName ?? '',
+        lastName: data.lastName ?? '',
+      });
+    },
+    onError: (error) => {
+      toast.error(error.error.serverError);
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
+    execute(values);
   };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">

@@ -2,7 +2,8 @@ import { PersonCard, PersonCardSkeleton } from '@/components/people/card';
 import { getPeople } from '@/server/actions/person';
 
 export async function PeopleList() {
-  const people = await getPeople();
+  const people = (await getPeople())?.data;
+  if (!people) return null;
   return (
     <div className="space-y-3">
       {people.map((person) => (

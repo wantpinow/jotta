@@ -12,20 +12,25 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { deleteNote } from '@/server/actions/notes';
 import { toast } from 'sonner';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 
 export function NoteCardActions({ note }: { note: Note }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [isDeleting, startTransition] = useTransition();
-  const handleDelete = async () => {
-    startTransition(async () => {
-      await deleteNote({ id: note.id });
+  const { execute, isExecuting } = useAction(deleteNote, {
+    onSuccess: () => {
       toast.success('Note deleted');
       setOpen(false);
       router.refresh();
-    });
+    },
+    onError: (error) => {
+      toast.error(error.error.serverError);
+    },
+  });
+  const handleDelete = async () => {
+    execute({ id: note.id });
   };
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -42,9 +47,9 @@ export function NoteCardActions({ note }: { note: Note }) {
               e.preventDefault();
               handleDelete();
             }}
-            disabled={isDeleting}
+            disabled={isExecuting}
           >
-            {isDeleting ? 'Deleting...' : 'Delete Note'}
+            {isExecuting ? 'Deleting...' : 'Delete Note'}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

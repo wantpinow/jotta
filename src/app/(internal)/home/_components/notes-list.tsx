@@ -2,7 +2,8 @@ import { NoteCard, NoteCardSkeleton } from '@/components/notes/card';
 import { getOwnNotes } from '@/server/actions/notes';
 
 export async function NotesList() {
-  const notes = await getOwnNotes();
+  const notes = (await getOwnNotes())?.data;
+  if (!notes) return null;
   return (
     <div className="space-y-3">
       {notes.map((note) => (

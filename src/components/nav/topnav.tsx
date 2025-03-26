@@ -29,9 +29,6 @@ export async function TopNav({ className }: { className?: string }) {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                {/* <Button variant="ghost" size="icon">
-                  <Bell className="h-5 w-5 text-muted-foreground hover:text-primary" />
-                </Button> */}
                 <NotificationsPopover />
                 <GradientBubble
                   seed={user.id}

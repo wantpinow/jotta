@@ -12,21 +12,26 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { deletePerson } from '@/server/actions/person';
 import { toast } from 'sonner';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 
 export function PersonCardActions({ person }: { person: Person }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [isDeleting, startTransition] = useTransition();
 
-  const handleDelete = async () => {
-    startTransition(async () => {
-      await deletePerson({ id: person.id });
+  const { execute, isExecuting } = useAction(deletePerson, {
+    onSuccess: () => {
       toast.success('Person deleted');
       setOpen(false);
       router.refresh();
-    });
+    },
+    onError: (error) => {
+      toast.error(error.error.serverError);
+    },
+  });
+  const handleDelete = async () => {
+    execute({ id: person.id });
   };
 
   return (
@@ -54,9 +59,9 @@ export function PersonCardActions({ person }: { person: Person }) {
               e.preventDefault();
               handleDelete();
             }}
-            disabled={isDeleting}
+            disabled={isExecuting}
           >
-            {isDeleting ? 'Deleting...' : 'Delete Person'}
+            {isExecuting ? 'Deleting...' : 'Delete Person'}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

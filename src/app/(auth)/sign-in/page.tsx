@@ -1,4 +1,5 @@
-import { ALLOWED_AUTH_METHODS, signInRedirect } from '@/lib/auth';
+import { signInRedirect } from '@/lib/auth';
+import { ALLOWED_AUTH_METHODS } from '@/lib/auth/lucia';
 import { CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';

@@ -1,17 +1,14 @@
 'use server';
 
-import { auth } from '@/lib/auth/validate';
 import { db } from '@/server/db';
 import { noteTable, personNoteMentionTable } from '@/server/db/schema';
 import { and, eq, desc } from 'drizzle-orm';
-import { Note, NoteWithMentions } from '@/server/db/schema/types';
-import { MentionSuggestion } from '@/components/tiptap/mentions/mentionSuggestionOptions';
+import { authenticatedAction } from '@/server/actions/safe-action';
+import { z } from 'zod';
+import { notFound } from 'next/navigation';
 
-export async function getOwnNotes(): Promise<NoteWithMentions[]> {
-  const { user } = await auth();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
+export const getOwnNotes = authenticatedAction.action(async ({ ctx }) => {
+  const { user } = ctx;
   const notes = await db.query.noteTable.findMany({
     where: eq(noteTable.userId, user.id),
     orderBy: desc(noteTable.updatedAt),
@@ -24,89 +21,96 @@ export async function getOwnNotes(): Promise<NoteWithMentions[]> {
     },
   });
   return notes;
-}
+});
 
-export async function getNote({ id }: { id: string }): Promise<NoteWithMentions> {
-  const { user } = await auth();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-  const note = await db.query.noteTable.findFirst({
-    where: and(eq(noteTable.id, id), eq(noteTable.userId, user.id)),
-    with: {
-      mentions: {
-        with: {
-          person: true,
+export const getNote = authenticatedAction
+  .schema(
+    z.object({
+      id: z.string(),
+    }),
+  )
+  .action(async ({ ctx, parsedInput: { id } }) => {
+    const { user } = ctx;
+    const note = await db.query.noteTable.findFirst({
+      where: and(eq(noteTable.id, id), eq(noteTable.userId, user.id)),
+      with: {
+        mentions: {
+          with: {
+            person: true,
+          },
         },
       },
-    },
+    });
+    if (!note) {
+      notFound();
+    }
+    return note;
   });
-  if (!note) {
-    throw new Error('Note not found');
-  }
-  return note;
-}
 
-export async function createNote({
-  content,
-  mentions,
-}: {
-  content: string;
-  mentions: MentionSuggestion[];
-}): Promise<Note> {
-  const { user } = await auth();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-  const [note] = await db
-    .insert(noteTable)
-    .values({
-      userId: user.id,
-      title: 'Untitled',
-      content,
-    })
-    .returning();
-  if (mentions.length > 0) {
-    await db
-      .insert(personNoteMentionTable)
-      .values(
+export const createNote = authenticatedAction
+  .schema(
+    z.object({
+      content: z.string(),
+      mentions: z.array(
+        z.object({
+          personId: z.string(),
+          noteId: z.string(),
+        }),
+      ),
+    }),
+  )
+  .action(async ({ ctx, parsedInput: { content, mentions } }) => {
+    const { user } = ctx;
+    const [note] = await db
+      .insert(noteTable)
+      .values({
+        userId: user.id,
+        title: 'Untitled',
+        content,
+      })
+      .returning();
+    if (mentions.length > 0) {
+      await db.insert(personNoteMentionTable).values(
         mentions.map((mention) => ({
-          personId: mention.id,
+          personId: mention.personId,
           noteId: note.id,
         })),
-      )
+      );
+    }
+    return note;
+  });
+
+export const updateNote = authenticatedAction
+  .schema(
+    z.object({
+      id: z.string(),
+      content: z.string(),
+    }),
+  )
+  .action(async ({ ctx, parsedInput: { id, content } }) => {
+    const { user } = ctx;
+    const [note] = await db
+      .update(noteTable)
+      .set({
+        content,
+      })
+      .where(and(eq(noteTable.id, id), eq(noteTable.userId, user.id)))
       .returning();
-  }
-  return note;
-}
+    return note;
+  });
 
-export async function updateNote({
-  id,
-  content,
-}: {
-  id: string;
-  content: string;
-}): Promise<Note> {
-  const { user } = await auth();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-  const [note] = await db
-    .update(noteTable)
-    .set({
-      content,
-    })
-    .where(and(eq(noteTable.id, id), eq(noteTable.userId, user.id)))
-    .returning();
-  return note;
-}
-
-export async function deleteNote({ id }: { id: string }): Promise<void> {
-  const { user } = await auth();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-  await db
-    .delete(noteTable)
-    .where(and(eq(noteTable.id, id), eq(noteTable.userId, user.id)));
-}
+export const deleteNote = authenticatedAction
+  .schema(
+    z.object({
+      id: z.string(),
+    }),
+  )
+  .action(async ({ ctx, parsedInput: { id } }) => {
+    const { user } = ctx;
+    if (!user) {
+      throw new Error('Unauthorized');
+    }
+    await db
+      .delete(noteTable)
+      .where(and(eq(noteTable.id, id), eq(noteTable.userId, user.id)));
+  });

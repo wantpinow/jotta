@@ -1,20 +1,18 @@
 'use server';
 
-import { auth } from '@/lib/auth/validate';
 import OpenAI from 'openai';
+import { z } from 'zod';
+import { authenticatedAction } from '@/server/actions/safe-action';
+
 const openai = new OpenAI();
 
-export async function transcribeAudioFile(file: File) {
-  const { user } = await auth();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
-
-  const transcription = await openai.audio.transcriptions.create({
-    file: file,
-    // model: 'gpt-4o-transcribe',
-    model: 'whisper-1',
-    prompt: 'You are a helpful assistant that transcribes audio files into clean text.',
+export const transcribeAudioFile = authenticatedAction
+  .schema(z.object({ file: z.instanceof(File) }))
+  .action(async ({ parsedInput: { file } }) => {
+    const transcription = await openai.audio.transcriptions.create({
+      file: file,
+      model: 'whisper-1',
+      prompt: 'You are a helpful assistant that transcribes audio files into clean text.',
+    });
+    return transcription.text;
   });
-  return transcription.text;
-}

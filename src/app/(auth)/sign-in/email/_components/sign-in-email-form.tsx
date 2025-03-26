@@ -14,11 +14,23 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { emailSignInSchema } from '@/lib/auth/email/validate';
+import { signUpRedirect } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { signInWithEmail } from '@/lib/auth/email/actions';
-import { useTransition } from 'react';
+import { useAction } from 'next-safe-action/hooks';
 
 export function SignInEmailForm({ redirect }: { redirect?: string }) {
-  const [isPending, startLogin] = useTransition();
+  const router = useRouter();
+
+  const { execute, isExecuting } = useAction(signInWithEmail, {
+    onSuccess: () => {
+      router.push(redirect ?? signUpRedirect);
+    },
+    onError: (error) => {
+      toast.error(error.error.serverError);
+    },
+  });
 
   const form = useForm<z.infer<typeof emailSignInSchema>>({
     resolver: zodResolver(emailSignInSchema),
@@ -29,9 +41,7 @@ export function SignInEmailForm({ redirect }: { redirect?: string }) {
   });
 
   const onSubmit = async (values: z.infer<typeof emailSignInSchema>) => {
-    startLogin(async () => {
-      await signInWithEmail({ ...values, redirect });
-    });
+    execute({ ...values });
   };
 
   return (
@@ -64,8 +74,8 @@ export function SignInEmailForm({ redirect }: { redirect?: string }) {
         <Button
           type="submit"
           className="ml-auto block"
-          loading={isPending}
-          loadingMessage="Signing in..."
+          // loading={isExecuting}
+          // loadingMessage="Signing in..."
         >
           Sign In
         </Button>

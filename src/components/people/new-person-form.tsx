@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { isFilledHtml } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { createPerson } from '@/server/actions/person';
-import { useTransition } from 'react';
+import { useAction } from 'next-safe-action/hooks';
 
 const newPersonFormSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
@@ -32,20 +32,25 @@ export function NewPersonForm({ redirectTo }: { redirectTo?: string }) {
       description: '',
     },
   });
-  const [isPending, startTransition] = useTransition();
-
-  const onSubmit = (data: z.infer<typeof newPersonFormSchema>) => {
-    startTransition(async () => {
-      const person = await createPerson({
-        name: data.name,
-        description: data.description,
-      });
+  const { execute, isExecuting } = useAction(createPerson, {
+    onSuccess: ({ data: person }) => {
+      if (!person) return;
       toast.success('Person saved');
       if (redirectTo) {
         router.push(redirectTo);
       } else {
         router.push(`/people/${person.id}`);
       }
+    },
+    onError: (error) => {
+      toast.error(error.error.serverError);
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof newPersonFormSchema>) => {
+    execute({
+      name: data.name,
+      description: data.description,
     });
   };
 
@@ -91,9 +96,9 @@ export function NewPersonForm({ redirectTo }: { redirectTo?: string }) {
           <Button
             type="submit"
             variant={form.formState.isValid ? 'default' : 'outline'}
-            disabled={isPending}
+            disabled={isExecuting}
           >
-            {isPending ? 'Saving...' : 'Save Person'}
+            {isExecuting ? 'Saving...' : 'Save Person'}
           </Button>
         </div>
       </form>

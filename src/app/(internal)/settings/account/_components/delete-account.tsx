@@ -11,22 +11,28 @@ import {
   AlertDialogContent,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { deleteUser } from '@/server/actions/user';
+import { deleteUser } from '@/server/actions/users/actions';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
+import { useAction } from 'next-safe-action/hooks';
 
 export function DeleteAccountDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const [isDeleting, startDelete] = useTransition();
+
+  const { execute, isExecuting } = useAction(deleteUser, {
+    onSuccess: () => {
+      toast.success('Account deleted');
+      router.push('/');
+    },
+    onError: (error) => {
+      toast.error(error.error.serverError);
+    },
+  });
 
   const handleDelete = async () => {
-    toast.success('Success');
-    startDelete(async () => {
-      await deleteUser();
-      router.push('/');
-    });
+    execute();
   };
 
   return (
@@ -43,16 +49,16 @@ export function DeleteAccountDialog({ children }: { children: React.ReactNode })
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            disabled={isDeleting}
+            disabled={isExecuting}
             onClick={(e) => {
               e.preventDefault();
-              if (isDeleting) {
+              if (isExecuting) {
                 return;
               }
               handleDelete();
             }}
           >
-            {isDeleting ? 'Deleting account...' : 'Delete my account'}
+            {isExecuting ? 'Deleting account...' : 'Delete my account'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -10,9 +10,10 @@ import { toast } from 'sonner';
 import { isFilledHtml } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { createNote } from '@/server/actions/notes';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { AudioRecorder } from '@/components/misc/audio-recorder';
 import { transcribeAudioFile } from '@/server/actions/transcribe';
+import { useAction } from 'next-safe-action/hooks';
 
 const newNoteFormSchema = z.object({
   content: z.string().min(1, { message: 'Note cannot be empty' }).refine(isFilledHtml, {
@@ -31,48 +32,62 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
     },
   });
   const [audioFiles, setAudioFiles] = useState<File[]>([]);
-  const [isSaving, startSaving] = useTransition();
-  const onSubmit = (data: z.infer<typeof newNoteFormSchema>) => {
-    startSaving(async () => {
-      if (!isFilledHtml(data.content)) {
-        toast.error('Note cannot be empty');
-        return;
-      }
-      const note = await createNote({ content: data.content, mentions: data.mentions });
-      toast.success('Note saved');
-      if (redirectTo) {
-        router.push(redirectTo);
-      } else {
-        router.push(`/notes/${note.id}`);
-      }
+
+  const { execute: executeCreateNote, isExecuting: isCreatingNote } = useAction(
+    createNote,
+    {
+      onSuccess: ({ data }) => {
+        if (!data) {
+          toast.error('Failed to save note');
+          return;
+        }
+        toast.success('Note saved');
+        if (redirectTo) {
+          router.push(redirectTo);
+        } else {
+          router.push(`/notes/${data?.id}`);
+        }
+      },
+      onError: (error) => {
+        toast.error(error.error.serverError);
+      },
+    },
+  );
+  const onSubmitForm = (values: z.infer<typeof newNoteFormSchema>) => {
+    executeCreateNote({
+      content: values.content,
+      mentions: values.mentions.map((mention) => ({
+        personId: mention.id,
+        noteId: mention.id,
+      })),
     });
   };
 
-  const [isTranscribing, startTranscribing] = useTransition();
-  const handleAudioUpdate = async (audioFile: File) => {
-    startTranscribing(async () => {
-      try {
-        // Call the transcribe action
-        const transcription = await transcribeAudioFile(audioFile);
-
-        // Update the editor content with the transcription
+  const { execute: executeTranscribe, isExecuting: isTranscribing } = useAction(
+    transcribeAudioFile,
+    {
+      onSuccess: ({ data: transcription }) => {
+        if (!transcription) return;
         const currentContent = form.getValues('content');
         const updatedContent = isFilledHtml(currentContent)
           ? `${currentContent}<p>${transcription}</p>`
           : `<p>${transcription}</p>`;
-
         form.setValue('content', updatedContent, { shouldValidate: true });
         toast.success('Audio transcription added.');
-      } catch (error) {
-        console.error('Transcription error:', error);
-        toast.error('Failed to transcribe audio');
-      }
-    });
+      },
+      onError: (error) => {
+        toast.error(error.error.serverError);
+      },
+    },
+  );
+
+  const handleAudioUpdate = async (audioFile: File) => {
+    executeTranscribe({ file: audioFile });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+      <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-3">
         <FormField
           control={form.control}
           name="content"
@@ -110,9 +125,9 @@ export function NewNoteForm({ redirectTo }: { redirectTo?: string }) {
             <Button
               type="submit"
               variant={form.formState.isValid ? 'default' : 'outline'}
-              disabled={isSaving || isTranscribing}
+              disabled={isCreatingNote || isTranscribing}
             >
-              {isSaving ? 'Saving...' : 'Save'}
+              {isCreatingNote || isTranscribing ? 'Saving...' : 'Save'}
             </Button>
           </div>
         </div>
