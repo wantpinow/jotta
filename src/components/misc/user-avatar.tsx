@@ -1,5 +1,5 @@
 import { User } from 'lucia';
-import { GradientBubble } from './gradient-bubble';
+import { GradientBubble } from '@/components/misc/gradient-bubble';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@/lib/utils';

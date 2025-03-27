@@ -26,10 +26,12 @@ export default async function SettingsAccountPage() {
       </CardHeader>
       <CardContent className="divide-y">
         <div className="pb-4 space-y-6">
-          <div className="flex gap-4 items-center">
-            <UserAvatar user={user} size={52} className="flex-none" />
-            <UserImageForm user={user} />
-          </div>
+          <UserImageForm user={user}>
+            <div className="flex gap-4 items-center w-fit">
+              <UserAvatar user={user} size={56} className="flex-none" />
+              <Button size="sm">Change Photo</Button>
+            </div>
+          </UserImageForm>
           <UserNameForm user={user} />
         </div>
         <div className="space-y-4 py-4">

@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default async function PersonPage({
   params,
@@ -11,7 +12,10 @@ export default async function PersonPage({
   params: Promise<{ personId: string }>;
 }) {
   const { personId } = await params;
-  const person = await getPerson({ id: personId });
+  const person = (await getPerson({ id: personId }))?.data;
+  if (!person) {
+    notFound();
+  }
 
   return (
     <div className="space-y-6">

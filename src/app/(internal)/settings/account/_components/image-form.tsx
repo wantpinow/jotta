@@ -19,11 +19,13 @@ import { useRouter } from 'next/navigation';
 import { UserAvatar } from '@/components/misc/user-avatar';
 import { User } from 'lucia';
 
-interface UserImageFormProps {
+export function UserImageForm({
+  user,
+  children,
+}: {
   user: User;
-}
-
-export function UserImageForm({ user }: UserImageFormProps) {
+  children: React.ReactNode;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const router = useRouter();
@@ -46,9 +48,7 @@ export function UserImageForm({ user }: UserImageFormProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm">Change Photo</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Change Profile Photo</DialogTitle>

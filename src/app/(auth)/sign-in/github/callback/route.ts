@@ -6,6 +6,7 @@ import { lucia } from '@/lib/auth/lucia';
 import { db } from '@/server/db';
 import { eq } from 'drizzle-orm';
 import { userTable } from '@/server/db/schema';
+import { createUser } from '@/server/actions/users/create-user';
 
 export async function GET(request: Request): Promise<Response> {
   // parse the query parameters
@@ -67,20 +68,11 @@ export async function GET(request: Request): Promise<Response> {
     }
 
     // create a new user
-    const [user] = await db
-      .insert(userTable)
-      .values({
-        githubId: githubUser.id,
-        email: githubUser.email,
-        image: githubUser.avatar_url,
-      })
-      .returning();
-
-    if (!user) {
-      return new Response(null, {
-        status: 500,
-      });
-    }
+    const user = await createUser({
+      email: githubUser.email,
+      githubId: githubUser.id,
+      image: githubUser.avatar_url,
+    });
 
     // create a session for the new user
     const session = await lucia.createSession(user.id, {});

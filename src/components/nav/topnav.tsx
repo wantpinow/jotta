@@ -1,4 +1,4 @@
-import { Brain } from 'lucide-react';
+import { Bell, Brain } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth/validate';
@@ -6,9 +6,16 @@ import { cn } from '@/lib/utils';
 import { TopNavLinks } from '@/components/nav/topnav-links';
 import NotificationsPopover from '@/components/nav/notifications-popover';
 import { UserAvatar } from '@/components/misc/user-avatar';
-
+import { getUserNotifications } from '@/server/actions/notifications/actions';
+import { UserNotification } from '@/server/db/schema/types';
+import { Suspense } from 'react';
 export async function TopNav({ className }: { className?: string }) {
   const { user } = await auth();
+  const getNotifications = async (): Promise<UserNotification[]> => {
+    const res = await getUserNotifications({ limit: 5 });
+    return res?.data ?? [];
+  };
+  const notificationsPromise = getNotifications();
   return (
     <nav
       className={cn('border-b border-primary/15 bg-background w-full z-50', className)}
@@ -26,10 +33,23 @@ export async function TopNav({ className }: { className?: string }) {
             <div className="h-9 bg-muted w-[2px]" />
             {user && <TopNavLinks />}
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-8">
             {user ? (
               <>
-                <NotificationsPopover />
+                <Suspense
+                  fallback={
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="relative hover:bg-transparent cursor-default"
+                      aria-label="Notifications"
+                    >
+                      <Bell className="h-5 w-5 text-muted-foreground" />
+                    </Button>
+                  }
+                >
+                  <NotificationsPopover notificationsPromise={notificationsPromise} />
+                </Suspense>
                 <UserAvatar
                   user={user}
                   size={32}

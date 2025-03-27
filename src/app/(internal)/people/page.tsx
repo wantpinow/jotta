@@ -1,5 +1,5 @@
 import { PageHeader } from '@/components/page/header';
-import { UserIcon, FileIcon } from 'lucide-react';
+import { UserIcon, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -20,9 +20,11 @@ export default function PeoplePage() {
           </Link>
         </Button>
         <Button variant="outline" asChild>
-          <Link href="/people/export">
-            <FileIcon />
-            Export
+          <Link href="/me">
+            <Bot />
+            <span>
+              <span className="text-primary">Auto</span> Biography
+            </span>
           </Link>
         </Button>
       </div>

@@ -1,0 +1,33 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Jotta.ai Contributions Guide
+
+This document outlines a guide for contributing code to this repository. The document covers:
+
+1. An overview of the codebase structure, including:
+    a. Technology stack
+    b. Directory structure
+    c. Deployment strategy
+2. How to build, run, and test the application via the command line.
+3. Backend contribution guicode.
+    a. Database schema
+    b. Writing server actions
+    c. 
+4. Frontend contribution guide.
+    a. Server vs client components
+    b. Using UI components
+    b. 
+    c. Style guide
+5. 
+
+Follow this guide 
+
+## 1. Codebase Overview
+
+### 1a. Technology Stack
+
+### 1b. Directory Structure
+
