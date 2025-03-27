@@ -1,9 +1,10 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { lucia, signOutRedirect } from '@/lib/auth';
+import { signOutRedirect } from '@/lib/auth';
 import { auth } from '@/lib/auth/validate';
 import { redirect } from 'next/navigation';
+import { lucia } from '@/lib/auth/lucia';
 
 export const signOut = async () => {
   const { session } = await auth();

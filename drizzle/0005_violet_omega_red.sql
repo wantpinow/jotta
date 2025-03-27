@@ -1,0 +1,1 @@
+ALTER TABLE "jotta_user" ADD COLUMN "image" text;

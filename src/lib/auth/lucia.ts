@@ -17,9 +17,11 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       githubId: attributes.githubId,
+      googleId: attributes.googleId,
       email: attributes.email,
       firstName: attributes.firstName,
       lastName: attributes.lastName,
+      image: attributes.image,
       admin: attributes.admin,
     };
   },
@@ -32,7 +34,7 @@ declare module 'lucia' {
   }
 }
 
-export const ALLOWED_AUTH_METHODS: AuthMethod[] = ['github'];
+export const ALLOWED_AUTH_METHODS: AuthMethod[] = ['github', 'google'];
 if (LOCAL_DEV) {
   ALLOWED_AUTH_METHODS.push('email');
 }

@@ -16,9 +16,11 @@ export const createTable = pgTableCreator((name) => `${PG_TABLE_PREFIX}${name}`)
 export const userTable = createTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
   githubId: text('github_id').unique(),
+  googleId: text('google_id').unique(),
   email: varchar('email', { length: 256 }).unique().notNull(),
   firstName: varchar('first_name', { length: 256 }),
   lastName: varchar('last_name', { length: 256 }),
+  image: text('image'),
   passwordHash: text('password_hash'),
   createdAt: timestamp('created_at', {
     withTimezone: true,

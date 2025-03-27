@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { OAuth2RequestError } from 'arctic';
-import { github } from '@/lib/auth/github';
+import { google } from '@/lib/auth/google';
 import { signInPath, signInRedirect } from '@/lib/auth';
 import { lucia } from '@/lib/auth/lucia';
 import { db } from '@/server/db';
@@ -12,8 +12,10 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
-  const storedState = (await cookies()).get('github_oauth_state')?.value ?? null;
-  if (!code || !state || !storedState || state !== storedState) {
+  const storedState = (await cookies()).get('google_oauth_state')?.value ?? null;
+  const storedCodeVerifier = (await cookies()).get('google_code_verifier')?.value ?? null;
+
+  if (!code || !state || !storedState || !storedCodeVerifier || state !== storedState) {
     return new Response(null, {
       status: 400,
     });
@@ -24,18 +26,23 @@ export async function GET(request: Request): Promise<Response> {
     const redirectUrl = (await cookies()).get('redirect_url')?.value ?? signInRedirect;
 
     // validate the code and exchange it for tokens
-    const tokens = await github.validateAuthorizationCode(code);
-    const githubUserResponse = await fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: `Bearer ${tokens.accessToken()}`,
+    const tokens = await google.validateAuthorizationCode(code, storedCodeVerifier);
+
+    // Get the user info from Google
+    const userInfoResponse = await fetch(
+      'https://openidconnect.googleapis.com/v1/userinfo',
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken()}`,
+        },
       },
-    });
+    );
 
-    const githubUser: GitHubUser = await githubUserResponse.json();
+    const googleUser: GoogleUser = await userInfoResponse.json();
 
-    // check if the user already exists with the same github id, sign them in if they do
+    // check if the user already exists with the same google id, sign them in if they do
     const existingUser = await db.query.userTable.findFirst({
-      where: eq(userTable.githubId, githubUser.id),
+      where: eq(userTable.googleId, googleUser.sub),
     });
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
@@ -55,7 +62,7 @@ export async function GET(request: Request): Promise<Response> {
 
     // check if a user already exists with the same email, redirect to sign in with error if they do
     const existingUserWithEmail = await db.query.userTable.findFirst({
-      where: eq(userTable.email, githubUser.email),
+      where: eq(userTable.email, googleUser.email),
     });
     if (existingUserWithEmail) {
       return new Response(null, {
@@ -70,9 +77,11 @@ export async function GET(request: Request): Promise<Response> {
     const [user] = await db
       .insert(userTable)
       .values({
-        githubId: githubUser.id,
-        email: githubUser.email,
-        image: githubUser.avatar_url,
+        googleId: googleUser.sub,
+        email: googleUser.email,
+        firstName: googleUser.given_name || null,
+        lastName: googleUser.family_name || null,
+        image: googleUser.picture,
       })
       .returning();
 
@@ -112,8 +121,12 @@ export async function GET(request: Request): Promise<Response> {
   }
 }
 
-interface GitHubUser {
-  id: string;
+interface GoogleUser {
+  sub: string;
   email: string;
-  avatar_url: string;
+  email_verified: boolean;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
 }

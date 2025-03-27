@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth/validate';
 import { cn } from '@/lib/utils';
-import { GradientBubble } from '@/components/misc/gradient-bubble';
 import { TopNavLinks } from '@/components/nav/topnav-links';
 import NotificationsPopover from '@/components/nav/notifications-popover';
+import { UserAvatar } from '@/components/misc/user-avatar';
 
 export async function TopNav({ className }: { className?: string }) {
   const { user } = await auth();
@@ -30,14 +30,12 @@ export async function TopNav({ className }: { className?: string }) {
             {user ? (
               <>
                 <NotificationsPopover />
-                <GradientBubble
-                  seed={user.id}
+                <UserAvatar
+                  user={user}
                   size={32}
-                  className="border border-border dark:border-0 shadow-xs cursor-pointer hover:opacity-80 transition-opacity duration-100 rounded-full"
-                  asChild
-                >
-                  <Link href="/settings"></Link>
-                </GradientBubble>
+                  className="border border-border dark:border-0 shadow-xs hover:opacity-80 transition-opacity duration-100 rounded-full"
+                  linkHref="/settings"
+                />
               </>
             ) : (
               <Button
