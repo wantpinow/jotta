@@ -22,6 +22,8 @@ env:
   NEON_DATABASE_NAME: ${{ vars.NEON_DATABASE_NAME }}
   NEON_DATABASE_USERNAME: ${{ vars.NEON_DATABASE_USERNAME }}
   OAUTH_GITHUB_CLIENT_ID: ${{ vars.OAUTH_GITHUB_CLIENT_ID }}
+  OAUTH_GOOGLE_CLIENT_ID: ${{ vars.OAUTH_GOOGLE_CLIENT_ID }}
+  OAUTH_GOOGLE_CLIENT_SECRET: ${{ vars.OAUTH_GOOGLE_CLIENT_SECRET }}
 
 jobs:
   deploy-production:
@@ -66,6 +68,9 @@ jobs:
           echo HOST=${{ env.HOST }} >> .env.local
           echo OAUTH_GITHUB_CLIENT_ID=${{ env.OAUTH_GITHUB_CLIENT_ID }} >> .env.local
           echo OAUTH_GITHUB_CLIENT_SECRET=${{ env.OAUTH_GITHUB_CLIENT_SECRET }} >> .env.local
+          echo OAUTH_GOOGLE_CLIENT_ID=${{ env.OAUTH_GOOGLE_CLIENT_ID }} >> .env.local
+          echo OAUTH_GOOGLE_CLIENT_SECRET=${{ env.OAUTH_GOOGLE_CLIENT_SECRET }} >> .env.local
+
           echo OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} >> .env.local
 
           # Deploy to Vercel

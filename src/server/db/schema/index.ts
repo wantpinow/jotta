@@ -2,7 +2,6 @@ import { relations, sql } from 'drizzle-orm';
 import {
   boolean,
   foreignKey,
-  pgEnum,
   pgTableCreator,
   primaryKey,
   text,

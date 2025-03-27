@@ -9,7 +9,10 @@ export default async function EditPersonPage({
   params: Promise<{ personId: string }>;
 }) {
   const { personId } = await params;
-  const person = await getPerson({ id: personId });
+  const person = (await getPerson({ id: personId }))?.data;
+  if (!person) {
+    return <div>Person not found</div>;
+  }
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">

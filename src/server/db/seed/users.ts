@@ -1,6 +1,5 @@
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '@/server/db/schema';
-import { NOTIFICATION_TYPES } from '@/lib/notifications';
 
 export async function seedUsers(db: PostgresJsDatabase<typeof schema>) {
   // database teardown

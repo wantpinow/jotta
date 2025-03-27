@@ -8,7 +8,10 @@ export default async function NotePage({
   params: Promise<{ noteId: string }>;
 }) {
   const { noteId } = await params;
-  const note = await getNote({ id: noteId });
+  const note = (await getNote({ id: noteId }))?.data;
+  if (!note) {
+    return <div>Note not found</div>;
+  }
   return (
     <div className="space-y-6">
       <PageHeader

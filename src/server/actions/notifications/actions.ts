@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/server/db';
-import { authenticatedAction } from '../safe-action';
+import { authenticatedAction } from '@/server/actions/safe-action';
 import { userNotificationsTable } from '@/server/db/schema';
 import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';

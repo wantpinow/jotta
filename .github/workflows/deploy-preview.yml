@@ -11,6 +11,7 @@ env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
   OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
+  OAUTH_GOOGLE_CLIENT_SECRET: ${{ secrets.OAUTH_GOOGLE_CLIENT_SECRET }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
   # variables
@@ -20,7 +21,7 @@ env:
   NEON_DATABASE_USERNAME: ${{ vars.NEON_DATABASE_USERNAME }}
   HOST: ${{ vars.HOST }}
   OAUTH_GITHUB_CLIENT_ID: ${{ vars.OAUTH_GITHUB_CLIENT_ID }}
-
+  OAUTH_GOOGLE_CLIENT_ID: ${{ vars.OAUTH_GOOGLE_CLIENT_ID }}
 jobs:
   deploy-preview:
     permissions: write-all
@@ -78,6 +79,8 @@ jobs:
           echo HOST=${{ env.HOST }} >> .env.local
           echo OAUTH_GITHUB_CLIENT_ID=${{ env.OAUTH_GITHUB_CLIENT_ID }} >> .env.local
           echo OAUTH_GITHUB_CLIENT_SECRET=${{ env.OAUTH_GITHUB_CLIENT_SECRET }} >> .env.local
+          echo OAUTH_GOOGLE_CLIENT_ID=${{ env.OAUTH_GOOGLE_CLIENT_ID }} >> .env.local
+          echo OAUTH_GOOGLE_CLIENT_SECRET=${{ env.OAUTH_GOOGLE_CLIENT_SECRET }} >> .env.local
           echo OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} >> .env.local
           # Deploy to Vercel
           preview_url=$(eval "vercel deploy --token=${{ env.VERCEL_TOKEN }} $(grep -v '^#' .env.local | grep '=' | awk '{print "-e " $0 " -b " $0}' | tr '\n' ' ')")
